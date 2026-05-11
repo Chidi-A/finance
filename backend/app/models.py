@@ -1,8 +1,10 @@
+from typing import Optional
 import uuid
 from datetime import datetime, timezone
+from decimal import Decimal
 
 from pydantic import EmailStr
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, Index, Numeric, UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -13,10 +15,7 @@ def get_datetime_utc() -> datetime:
 # Shared properties
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
-    is_active: bool = True
-    is_superuser: bool = False
-    full_name: str | None = Field(default=None, max_length=255)
-
+    
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
@@ -26,23 +25,7 @@ class UserCreate(UserBase):
 class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=128)
-    full_name: str | None = Field(default=None, max_length=255)
 
-
-# Properties to receive via API on update, all are optional
-class UserUpdate(UserBase):
-    email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore[assignment]
-    password: str | None = Field(default=None, min_length=8, max_length=128)
-
-
-class UserUpdateMe(SQLModel):
-    full_name: str | None = Field(default=None, max_length=255)
-    email: EmailStr | None = Field(default=None, max_length=255)
-
-
-class UpdatePassword(SQLModel):
-    current_password: str = Field(min_length=8, max_length=128)
-    new_password: str = Field(min_length=8, max_length=128)
 
 
 # Database model, database table inferred from class name
@@ -51,9 +34,9 @@ class User(UserBase, table=True):
     hashed_password: str
     created_at: datetime | None = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=DateTime(timezone=True),  
     )
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    account: Optional["Account"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -62,29 +45,25 @@ class UserPublic(UserBase):
     created_at: datetime | None = None
 
 
-class UsersPublic(SQLModel):
-    data: list[UserPublic]
-    count: int
+
+class AccountBase(SQLModel):
+    current_balance: Decimal = Field(default=Decimal("0.00"), sa_type=Numeric(12, 2))  
+    income: Decimal = Field(default=Decimal("0.00"), sa_type=Numeric(12, 2))  
+    expenses: Decimal = Field(default=Decimal("0.00"), sa_type=Numeric(12, 2))  
 
 
-# Shared properties
-class ItemBase(SQLModel):
-    title: str = Field(min_length=1, max_length=255)
-    description: str | None = Field(default=None, max_length=255)
-
-
-# Properties to receive on item creation
-class ItemCreate(ItemBase):
+class AccountCreate(AccountBase):
     pass
 
 
-# Properties to receive on item update
-class ItemUpdate(ItemBase):
-    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore[assignment]
+class AccountUpdate(SQLModel):
+    current_balance: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  
+    income: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  
+    expenses: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  
 
 
-# Database model, database table inferred from class name
-class Item(ItemBase, table=True):
+class Account(AccountBase, table=True):
+    __table_args__ = (UniqueConstraint("owner_id", name="uq_account_owner_id"),)
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     created_at: datetime | None = Field(
         default_factory=get_datetime_utc,
@@ -93,19 +72,163 @@ class Item(ItemBase, table=True):
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: User | None = Relationship(back_populates="items")
+    owner: Optional[User] = Relationship(back_populates="account")
+    categories: list["Category"] = Relationship(back_populates="account", cascade_delete=True)
+    transactions: list["Transaction"] = Relationship(back_populates="account", cascade_delete=True)
+    budgets: list["Budget"] = Relationship(back_populates="account", cascade_delete=True)
+    pots: list["Pot"] = Relationship(back_populates="account", cascade_delete=True)
 
 
-# Properties to return via API, id is always required
-class ItemPublic(ItemBase):
+class AccountPublic(AccountBase):
     id: uuid.UUID
     owner_id: uuid.UUID
     created_at: datetime | None = None
 
 
-class ItemsPublic(SQLModel):
-    data: list[ItemPublic]
-    count: int
+class CategoryBase(SQLModel):
+    name: str = Field(min_length=1, max_length=255)
+
+class CategoryCreate(CategoryBase):
+    pass
+
+class CategoryUpdate(SQLModel):
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+
+class Category(CategoryBase, table=True):
+    __table_args__ = (
+        UniqueConstraint("account_id", "name", name="uq_category_account_id_name"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    account_id: uuid.UUID = Field(
+        foreign_key="account.id", nullable=False, ondelete="CASCADE"
+    )
+    account: Optional["Account"] = Relationship(back_populates="categories")
+    transactions: list["Transaction"] = Relationship(back_populates="category", cascade_delete=False)
+    budgets: list["Budget"] = Relationship(back_populates="category", cascade_delete=False)
+
+
+class CategoryPublic(CategoryBase):
+    id: uuid.UUID
+    account_id: uuid.UUID
+    created_at: datetime | None = None
+
+
+class TransactionBase(SQLModel):
+    counterparty_name: str = Field(min_length=1, max_length=255)
+    avatar_url: str | None = Field(default=None, max_length=1024)
+    posted_at: datetime = Field(sa_type=DateTime(timezone=True))  
+    amount: Decimal = Field(sa_type=Numeric(12, 2))  
+    is_recurring: bool = False
+
+
+class TransactionCreate(TransactionBase):
+    category_id: uuid.UUID
+
+class TransactionUpdate(SQLModel):
+    counterparty_name: str | None = Field(default=None, min_length=1, max_length=255)
+    avatar_url: str | None = Field(default=None, max_length=1024)
+    posted_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore[arg-type]
+    amount: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  # type: ignore[arg-type]
+    is_recurring: bool | None = None
+    category_id: uuid.UUID | None = None
+
+class Transaction(TransactionBase, table=True):
+    __table_args__ = (
+        Index("ix_transaction_account_posted_at", "account_id", "posted_at"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    account_id: uuid.UUID = Field(
+        foreign_key="account.id", nullable=False, ondelete="CASCADE"
+    )
+    account: Optional[Account] = Relationship(back_populates="transactions")
+    category_id: uuid.UUID = Field(
+        foreign_key="category.id", nullable=False, ondelete="RESTRICT"
+    )
+    category: Optional["Category"] = Relationship(back_populates="transactions")
+
+class TransactionPublic(TransactionBase):
+    id: uuid.UUID
+    account_id: uuid.UUID
+    category_id: uuid.UUID
+    created_at: datetime | None = None
+
+class BudgetBase(SQLModel):
+    maximum: Decimal = Field(sa_type=Numeric(12, 2))  # type: ignore[arg-type]
+    theme: str = Field(min_length=4, max_length=32)  # store "#RRGGBB" etc.
+
+class BudgetCreate(BudgetBase):
+    category_id: uuid.UUID
+
+class BudgetUpdate(SQLModel):
+    maximum: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  # type: ignore[arg-type]
+    theme: str | None = Field(default=None, min_length=4, max_length=32)
+    category_id: uuid.UUID | None = None
+
+class Budget(BudgetBase, table=True):
+    __table_args__ = (
+        UniqueConstraint("account_id", "category_id", name="uq_budget_account_id_category_id"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    account_id: uuid.UUID = Field(
+        foreign_key="account.id", nullable=False, ondelete="CASCADE"
+    )
+    account: Optional["Account"] = Relationship(back_populates="budgets")
+    category_id: uuid.UUID = Field(
+        foreign_key="category.id", nullable=False, ondelete="RESTRICT"
+    )
+    category: Optional["Category"] = Relationship(back_populates="budgets")
+
+class BudgetPublic(BudgetBase):
+    id: uuid.UUID
+    account_id: uuid.UUID
+    category_id: uuid.UUID
+    created_at: datetime | None = None
+
+class PotBase(SQLModel):
+    name: str = Field(min_length=1, max_length=255)
+    target: Decimal = Field(sa_type=Numeric(12, 2))  
+    total: Decimal = Field(default=Decimal("0.00"), sa_type=Numeric(12, 2))  
+    theme: str = Field(min_length=4, max_length=32)
+
+class PotCreate(PotBase):
+    pass
+
+class PotUpdate(SQLModel):
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    target: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  
+    total: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  
+    theme: str | None = Field(default=None, min_length=4, max_length=32)
+
+class Pot(PotBase, table=True):
+    __table_args__ = (
+        UniqueConstraint("account_id", "name", name="uq_pot_account_id_name"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  
+    )
+    account_id: uuid.UUID = Field(
+        foreign_key="account.id", nullable=False, ondelete="CASCADE"
+    )
+    account: Optional["Account"] = Relationship(back_populates="pots")
+
+class PotPublic(PotBase):
+    id: uuid.UUID
+    account_id: uuid.UUID
+    created_at: datetime | None = None
 
 
 # Generic message
@@ -124,6 +247,3 @@ class TokenPayload(SQLModel):
     sub: str | None = None
 
 
-class NewPassword(SQLModel):
-    token: str
-    new_password: str = Field(min_length=8, max_length=128)
