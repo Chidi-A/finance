@@ -17,6 +17,20 @@ def create_user(*, session: Session, user_create: UserCreate) -> User:
     return db_obj
 
 
+def create_account_with_data(
+    *, session: Session, user: User, data: dict | None = None
+) -> None:
+    """
+    Seeds an Account, Categories, Transactions, Budgets, and Pots
+    for an already-persisted user.
+    *data* defaults to DEFAULT_SEED_DATA from app.data.seed_data.
+    Import is deferred to avoid a circular import at module load time.
+    """
+    from app.data.seed_data import DEFAULT_SEED_DATA, seed_user_data
+    seed_user_data(session=session, user=user, data=data or DEFAULT_SEED_DATA)
+    session.commit()
+
+
 
 def get_user_by_email(*, session: Session, email: str) -> User | None:
     statement = select(User).where(User.email == email)

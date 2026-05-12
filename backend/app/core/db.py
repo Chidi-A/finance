@@ -28,6 +28,19 @@ def init_db(session: Session) -> None:
         user_in = UserCreate(
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,
-            is_superuser=True,
         )
         user = crud.create_user(session=session, user_create=user_in)
+
+    
+    demo_user = session.exec(
+        select(User).where(User.email == settings.DEMO_USER_EMAIL)
+    ).first()
+    if not demo_user:
+        demo_user = crud.create_user(
+            session=session,
+            user_create=UserCreate(
+                email=settings.DEMO_USER_EMAIL,
+                password=settings.DEMO_USER_PASSWORD,
+            ),
+        )
+        crud.create_account_with_data(session=session, user=demo_user)
