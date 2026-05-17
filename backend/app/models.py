@@ -125,16 +125,6 @@ class TransactionBase(SQLModel):
     is_recurring: bool = False
 
 
-class TransactionCreate(TransactionBase):
-    category_id: uuid.UUID
-
-class TransactionUpdate(SQLModel):
-    counterparty_name: str | None = Field(default=None, min_length=1, max_length=255)
-    avatar_url: str | None = Field(default=None, max_length=1024)
-    posted_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore[arg-type]
-    amount: Decimal | None = Field(default=None, sa_type=Numeric(12, 2))  # type: ignore[arg-type]
-    is_recurring: bool | None = None
-    category_id: uuid.UUID | None = None
 
 class Transaction(TransactionBase, table=True):
     __table_args__ = (

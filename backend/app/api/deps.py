@@ -11,7 +11,7 @@ from sqlmodel import Session
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
-from app.models import TokenPayload, User
+from app.models import TokenPayload, User, Account
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -45,6 +45,16 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+def get_current_account(session: SessionDep, current_user: CurrentUser) -> Account:
+    from sqlmodel import select
+    account = session.exec(select(Account).where(Account.owner_id == current_user.id)).first()
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return account
+
+
+CurrentAccount = Annotated[Account, Depends(get_current_account)]
 
 
 def get_current_active_superuser(current_user: CurrentUser) -> User:
