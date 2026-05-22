@@ -1,5 +1,20 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/assets/fonts/PublicSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public Sans';
+  src: url('/assets/fonts/PublicSans-Italic-VariableFont_wght.ttf')
+    format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -66,14 +81,14 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.5982 0.10687 182.4689);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #201f24;
+  --sidebar-foreground: oklch(0.92 0 0);
+  --sidebar-primary: oklch(0.92 0 0);
+  --sidebar-primary-foreground: oklch(0.17 0.015 250);
+  --sidebar-accent: #f8f4f0;
+  --sidebar-accent-foreground: oklch(0.17 0.015 250);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.5 0 0);
 }
 
 .dark {
@@ -100,12 +115,12 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: #201f24;
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.65 0.10687 182.4689);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-accent: #f8f4f0;
+  --sidebar-accent-foreground: #201f24;
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
@@ -116,9 +131,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Public Sans', sans-serif;
   }
   button,
-  [role="button"] {
+  [role='button'] {
     cursor: pointer;
   }
 }

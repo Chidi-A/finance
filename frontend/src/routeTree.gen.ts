@@ -15,6 +15,7 @@ import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutTransactionsRouteImport } from './routes/_layout/transactions'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
@@ -48,6 +49,11 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutTransactionsRoute = LayoutTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -65,6 +71,7 @@ const LayoutAdminRoute = LayoutAdminRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof LayoutIndexRoute
   '/login': typeof LoginRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -72,7 +79,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof LayoutAdminRoute
   '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
-  '/': typeof LayoutIndexRoute
+  '/transactions': typeof LayoutTransactionsRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/admin': typeof LayoutAdminRoute
   '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
+  '/transactions': typeof LayoutTransactionsRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
@@ -94,11 +102,13 @@ export interface FileRoutesById {
   '/_layout/admin': typeof LayoutAdminRoute
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
+  '/_layout/transactions': typeof LayoutTransactionsRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
     | '/recover-password'
     | '/reset-password'
@@ -106,7 +116,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/items'
     | '/settings'
-    | '/'
+    | '/transactions'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/items'
     | '/settings'
+    | '/transactions'
     | '/'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/_layout/admin'
     | '/_layout/items'
     | '/_layout/settings'
+    | '/_layout/transactions'
     | '/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -171,7 +183,7 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -180,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/transactions': {
+      id: '/_layout/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof LayoutTransactionsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/settings': {
@@ -210,6 +229,7 @@ interface LayoutRouteChildren {
   LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
+  LayoutTransactionsRoute: typeof LayoutTransactionsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
@@ -217,6 +237,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAdminRoute: LayoutAdminRoute,
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
+  LayoutTransactionsRoute: LayoutTransactionsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
