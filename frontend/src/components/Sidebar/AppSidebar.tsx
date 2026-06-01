@@ -21,6 +21,9 @@ import {
 
 import { type Item, Main } from './Main';
 
+import { User } from './User';
+import useAuth from '@/hooks/useAuth';
+
 const navItems: Item[] = [
   { icon: OverviewIcon, title: 'Overview', path: '/' },
   { icon: TransactionsIcon, title: 'Transactions', path: '/transactions' },
@@ -51,6 +54,8 @@ function MinimizeMenu() {
 }
 
 export function AppSidebar() {
+  const { user } = useAuth();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="pt-6 pb-13 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center ">
@@ -60,6 +65,7 @@ export function AppSidebar() {
         <Main items={navItems} />
       </SidebarContent>
       <SidebarFooter>
+        {/* <User user={user} /> */}
         <MinimizeMenu />
       </SidebarFooter>
     </Sidebar>
