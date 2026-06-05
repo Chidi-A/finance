@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AccountReadAccountMeResponse, BudgetsReadBudgetsResponse, BudgetsCreateBudgetData, BudgetsCreateBudgetResponse, BudgetsUpdateBudgetData, BudgetsUpdateBudgetResponse, BudgetsDeleteBudgetData, BudgetsDeleteBudgetResponse, CategoriesReadCategoriesResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, PotsReadPotsResponse, PotsCreatePotData, PotsCreatePotResponse, PotsUpdatePotData, PotsUpdatePotResponse, PotsDeletePotData, PotsDeletePotResponse, PotsAddToPotData, PotsAddToPotResponse, PotsWithdrawFromPotData, PotsWithdrawFromPotResponse, TransactionsReadTransactionsData, TransactionsReadTransactionsResponse, TransactionsCountTransactionsData, TransactionsCountTransactionsResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AccountReadAccountMeResponse, BudgetsReadBudgetsResponse, BudgetsCreateBudgetData, BudgetsCreateBudgetResponse, BudgetsUpdateBudgetData, BudgetsUpdateBudgetResponse, BudgetsDeleteBudgetData, BudgetsDeleteBudgetResponse, CategoriesReadCategoriesResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, PotsReadPotsResponse, PotsCreatePotData, PotsCreatePotResponse, PotsUpdatePotData, PotsUpdatePotResponse, PotsDeletePotData, PotsDeletePotResponse, PotsAddToPotData, PotsAddToPotResponse, PotsWithdrawFromPotData, PotsWithdrawFromPotResponse, TransactionsReadTransactionsData, TransactionsReadTransactionsResponse, TransactionsCountTransactionsData, TransactionsCountTransactionsResponse, TransactionsSpendingByCategoryResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AccountService {
     /**
@@ -319,6 +319,18 @@ export class TransactionsService {
             errors: {
                 422: 'Validation Error'
             }
+        });
+    }
+    
+    /**
+     * Spending By Category
+     * @returns string Successful Response
+     * @throws ApiError
+     */
+    public static spendingByCategory(): CancelablePromise<TransactionsSpendingByCategoryResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/transactions/spending-by-category'
         });
     }
 }

@@ -38,3 +38,17 @@ export function getTransactionsCountQueryOptions(
   };
 }
 export { LIMIT };
+
+export function getLatestTransactionsByCategoryQueryOptions(
+  categoryId: string,
+) {
+  return {
+    queryFn: () =>
+      TransactionsService.readTransactions({
+        categoryId,
+        limit: 3,
+        sortBy: 'latest',
+      }),
+    queryKey: ['transactions', 'latest', categoryId],
+  };
+}

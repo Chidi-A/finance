@@ -39,6 +39,7 @@ import {
   getTransactionsCountQueryOptions,
   LIMIT,
 } from '@/queries/transactions';
+import { cn } from '@/lib/utils';
 
 const transactionsSearchSchema = z.object({
   search: z.string().catch(''),
@@ -150,21 +151,19 @@ function TransactionsTableContent({
       </Table>
       {totalPages > 1 && (
         <Pagination>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (page > 1) setPage(page - 1);
+            }}
+            className={cn(
+              'border border-[#98908B] rounded-md',
+              page === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer',
+            )}
+          />
+
           <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (page > 1) setPage(page - 1);
-                }}
-                className={
-                  page === 1
-                    ? 'pointer-events-none opacity-50'
-                    : 'cursor-pointer'
-                }
-              />
-            </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <PaginationItem key={p}>
                 <PaginationLink
@@ -180,21 +179,21 @@ function TransactionsTableContent({
                 </PaginationLink>
               </PaginationItem>
             ))}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (page < totalPages) setPage(page + 1);
-                }}
-                className={
-                  page === totalPages
-                    ? 'pointer-events-none opacity-50'
-                    : 'cursor-pointer'
-                }
-              />
-            </PaginationItem>
           </PaginationContent>
+
+          <PaginationNext
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (page < totalPages) setPage(page + 1);
+            }}
+            className={cn(
+              'border border-[#98908B] rounded-md',
+              page === totalPages
+                ? 'pointer-events-none opacity-50'
+                : 'cursor-pointer',
+            )}
+          />
         </Pagination>
       )}
     </>

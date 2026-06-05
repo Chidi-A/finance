@@ -212,6 +212,10 @@ export type TransactionsCountTransactionsData = {
 
 export type TransactionsCountTransactionsResponse = (number);
 
+export type TransactionsSpendingByCategoryResponse = ({
+    [key: string]: (string);
+});
+
 export type UsersCreateUserData = {
     requestBody: UserCreate;
 };

@@ -61,3 +61,15 @@ def count_transactions(
     if search:
         stmt = stmt.where(col(Transaction.counterparty_name).ilike(f"%{search}%"))
     return session.exec(stmt).one()
+
+
+@router.get("/spending-by-category")
+def spending_by_category(session: SessionDep, account: CurrentAccount) -> dict[str, str]:
+    stmt = (
+        select(Transaction.category_id, func.sum(Transaction.amount).label("total"))
+        .where(Transaction.account_id == account.id)
+        .where(Transaction.amount < 0)
+        .group_by(Transaction.category_id)
+    )
+    rows = session.exec(stmt).all()
+    return {str(row.category_id): str(abs(row.total)) for row in rows}
