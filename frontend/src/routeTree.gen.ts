@@ -17,6 +17,7 @@ import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutTransactionsRouteImport } from './routes/_layout/transactions'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
+import { Route as LayoutPotsRouteImport } from './routes/_layout/pots'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutBudgetsRouteImport } from './routes/_layout/budgets'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
@@ -60,6 +61,11 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutPotsRoute = LayoutPotsRouteImport.update({
+  id: '/pots',
+  path: '/pots',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutItemsRoute = LayoutItemsRouteImport.update({
   id: '/items',
   path: '/items',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof LayoutAdminRoute
   '/budgets': typeof LayoutBudgetsRoute
   '/items': typeof LayoutItemsRoute
+  '/pots': typeof LayoutPotsRoute
   '/settings': typeof LayoutSettingsRoute
   '/transactions': typeof LayoutTransactionsRoute
 }
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/admin': typeof LayoutAdminRoute
   '/budgets': typeof LayoutBudgetsRoute
   '/items': typeof LayoutItemsRoute
+  '/pots': typeof LayoutPotsRoute
   '/settings': typeof LayoutSettingsRoute
   '/transactions': typeof LayoutTransactionsRoute
   '/': typeof LayoutIndexRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/_layout/admin': typeof LayoutAdminRoute
   '/_layout/budgets': typeof LayoutBudgetsRoute
   '/_layout/items': typeof LayoutItemsRoute
+  '/_layout/pots': typeof LayoutPotsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/transactions': typeof LayoutTransactionsRoute
   '/_layout/': typeof LayoutIndexRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budgets'
     | '/items'
+    | '/pots'
     | '/settings'
     | '/transactions'
   fileRoutesByTo: FileRoutesByTo
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budgets'
     | '/items'
+    | '/pots'
     | '/settings'
     | '/transactions'
     | '/'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/_layout/admin'
     | '/_layout/budgets'
     | '/_layout/items'
+    | '/_layout/pots'
     | '/_layout/settings'
     | '/_layout/transactions'
     | '/_layout/'
@@ -220,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/pots': {
+      id: '/_layout/pots'
+      path: '/pots'
+      fullPath: '/pots'
+      preLoaderRoute: typeof LayoutPotsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/items': {
       id: '/_layout/items'
       path: '/items'
@@ -248,6 +267,7 @@ interface LayoutRouteChildren {
   LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutBudgetsRoute: typeof LayoutBudgetsRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
+  LayoutPotsRoute: typeof LayoutPotsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutTransactionsRoute: typeof LayoutTransactionsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
@@ -257,6 +277,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAdminRoute: LayoutAdminRoute,
   LayoutBudgetsRoute: LayoutBudgetsRoute,
   LayoutItemsRoute: LayoutItemsRoute,
+  LayoutPotsRoute: LayoutPotsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutTransactionsRoute: LayoutTransactionsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
