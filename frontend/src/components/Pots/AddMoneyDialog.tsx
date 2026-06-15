@@ -104,12 +104,12 @@ export function AddMoneyDialog({
           </div>
           <div className="w-full h-3 bg-white rounded-full overflow-hidden flex">
             <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${currentPct}%`, backgroundColor: pot.theme }}
+              className="h-full rounded-l-full transition-all"
+              style={{ width: `${currentPct}%`, backgroundColor: '#201F24' }}
             />
             {amount > 0 && (
               <div
-                className="h-full rounded-full transition-all bg-[#201F24]"
+                className="h-full rounded-r-full transition-all bg-[#277C78] ml-1"
                 style={{ width: `${newPct - currentPct}%` }}
               />
             )}

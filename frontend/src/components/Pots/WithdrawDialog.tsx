@@ -108,19 +108,21 @@ export function WithdrawDialog({
           </div>
           <div className="w-full h-3 bg-white rounded-full overflow-hidden flex">
             <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${newPct}%`, backgroundColor: pot.theme }}
+              className="h-full rounded-l-full transition-all"
+              style={{ width: `${newPct}%`, backgroundColor: '#201F24' }}
             />
             {amount > 0 && (
               <div
-                className="h-full rounded-full transition-all bg-[#C94736]/30"
+                className="h-full rounded-r-full transition-all bg-[#C94736] ml-1"
                 style={{ width: `${withdrawPct}%` }}
               />
             )}
           </div>
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center justify-between text-xs  text-[#C94736]">
             <span>{newPct.toFixed(1)}%</span>
-            <span>Target of ${target.toFixed(2)}</span>
+            <span className="text-[#696868]">
+              Target of ${target.toFixed(2)}
+            </span>
           </div>
         </div>
 

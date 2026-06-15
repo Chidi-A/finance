@@ -82,6 +82,16 @@ export type PotUpdate = {
     theme?: (string | null);
 };
 
+export type RecurringBillsSummary = {
+    total_bills: string;
+    paid_count: number;
+    paid_total: string;
+    upcoming_count: number;
+    upcoming_total: string;
+    due_soon_count: number;
+    due_soon_total: string;
+};
+
 export type Token = {
     access_token: string;
     token_type?: string;
@@ -215,6 +225,8 @@ export type TransactionsCountTransactionsResponse = (number);
 export type TransactionsSpendingByCategoryResponse = ({
     [key: string]: (string);
 });
+
+export type TransactionsRecurringBillsSummaryResponse = (RecurringBillsSummary);
 
 export type UsersCreateUserData = {
     requestBody: UserCreate;

@@ -52,3 +52,27 @@ export function getLatestTransactionsByCategoryQueryOptions(
     queryKey: ['transactions', 'latest', categoryId],
   };
 }
+
+export function getRecurringBillsQueryOptions(params: {
+  search: string;
+  sortBy: string;
+}) {
+  const { search, sortBy } = params;
+  return {
+    queryFn: () =>
+      TransactionsService.readTransactions({
+        isRecurring: true,
+        search: search || undefined,
+        sortBy: sortBy,
+        limit: 100,
+      }),
+    queryKey: ['transactions', 'recurring', params],
+  };
+}
+
+export function getRecurringBillsSummaryQueryOptions() {
+  return {
+    queryFn: () => TransactionsService.recurringBillsSummary(),
+    queryKey: ['transactions', 'recurring-summary'],
+  };
+}

@@ -17,6 +17,7 @@ import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutTransactionsRouteImport } from './routes/_layout/transactions'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
+import { Route as LayoutRecurringBillsRouteImport } from './routes/_layout/recurring-bills'
 import { Route as LayoutPotsRouteImport } from './routes/_layout/pots'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutBudgetsRouteImport } from './routes/_layout/budgets'
@@ -61,6 +62,11 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutRecurringBillsRoute = LayoutRecurringBillsRouteImport.update({
+  id: '/recurring-bills',
+  path: '/recurring-bills',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutPotsRoute = LayoutPotsRouteImport.update({
   id: '/pots',
   path: '/pots',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/budgets': typeof LayoutBudgetsRoute
   '/items': typeof LayoutItemsRoute
   '/pots': typeof LayoutPotsRoute
+  '/recurring-bills': typeof LayoutRecurringBillsRoute
   '/settings': typeof LayoutSettingsRoute
   '/transactions': typeof LayoutTransactionsRoute
 }
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/budgets': typeof LayoutBudgetsRoute
   '/items': typeof LayoutItemsRoute
   '/pots': typeof LayoutPotsRoute
+  '/recurring-bills': typeof LayoutRecurringBillsRoute
   '/settings': typeof LayoutSettingsRoute
   '/transactions': typeof LayoutTransactionsRoute
   '/': typeof LayoutIndexRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/_layout/budgets': typeof LayoutBudgetsRoute
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/pots': typeof LayoutPotsRoute
+  '/_layout/recurring-bills': typeof LayoutRecurringBillsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/transactions': typeof LayoutTransactionsRoute
   '/_layout/': typeof LayoutIndexRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/budgets'
     | '/items'
     | '/pots'
+    | '/recurring-bills'
     | '/settings'
     | '/transactions'
   fileRoutesByTo: FileRoutesByTo
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/budgets'
     | '/items'
     | '/pots'
+    | '/recurring-bills'
     | '/settings'
     | '/transactions'
     | '/'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/_layout/budgets'
     | '/_layout/items'
     | '/_layout/pots'
+    | '/_layout/recurring-bills'
     | '/_layout/settings'
     | '/_layout/transactions'
     | '/_layout/'
@@ -232,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/recurring-bills': {
+      id: '/_layout/recurring-bills'
+      path: '/recurring-bills'
+      fullPath: '/recurring-bills'
+      preLoaderRoute: typeof LayoutRecurringBillsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/pots': {
       id: '/_layout/pots'
       path: '/pots'
@@ -268,6 +287,7 @@ interface LayoutRouteChildren {
   LayoutBudgetsRoute: typeof LayoutBudgetsRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutPotsRoute: typeof LayoutPotsRoute
+  LayoutRecurringBillsRoute: typeof LayoutRecurringBillsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutTransactionsRoute: typeof LayoutTransactionsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
@@ -278,6 +298,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutBudgetsRoute: LayoutBudgetsRoute,
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutPotsRoute: LayoutPotsRoute,
+  LayoutRecurringBillsRoute: LayoutRecurringBillsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutTransactionsRoute: LayoutTransactionsRoute,
   LayoutIndexRoute: LayoutIndexRoute,

@@ -472,6 +472,46 @@ export const PotUpdateSchema = {
     title: 'PotUpdate'
 } as const;
 
+export const RecurringBillsSummarySchema = {
+    properties: {
+        total_bills: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Total Bills'
+        },
+        paid_count: {
+            type: 'integer',
+            title: 'Paid Count'
+        },
+        paid_total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Paid Total'
+        },
+        upcoming_count: {
+            type: 'integer',
+            title: 'Upcoming Count'
+        },
+        upcoming_total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Upcoming Total'
+        },
+        due_soon_count: {
+            type: 'integer',
+            title: 'Due Soon Count'
+        },
+        due_soon_total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Due Soon Total'
+        }
+    },
+    type: 'object',
+    required: ['total_bills', 'paid_count', 'paid_total', 'upcoming_count', 'upcoming_total', 'due_soon_count', 'due_soon_total'],
+    title: 'RecurringBillsSummary'
+} as const;
+
 export const TokenSchema = {
     properties: {
         access_token: {
