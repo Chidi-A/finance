@@ -57,5 +57,3 @@ def get_current_account(session: SessionDep, current_user: CurrentUser) -> Accou
 CurrentAccount = Annotated[Account, Depends(get_current_account)]
 
 
-def get_current_active_superuser(current_user: CurrentUser) -> User:
-    return current_user
