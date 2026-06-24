@@ -46,7 +46,7 @@ export function BudgetsWidget() {
   const displayed = budgets.slice(0, 4);
 
   return (
-    <div className="rounded-xl bg-card p-6 flex flex-col gap-10">
+    <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-10">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Budgets</h2>
         <Link
@@ -62,7 +62,7 @@ export function BudgetsWidget() {
         </Link>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
         {/* Chart container — fills half the card */}
         <div className="relative shrink-0 ml-[-10px]">
           <PieChart width={280} height={280}>
@@ -96,7 +96,7 @@ export function BudgetsWidget() {
           </div>
         </div>
         {/* 2×2 category grid */}
-        <div className="grid grid-cols-1 gap-4 ">
+        <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 w-full ">
           {displayed.map((b) => (
             <div key={b.id} className="flex gap-3">
               <div

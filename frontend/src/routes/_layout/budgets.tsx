@@ -74,7 +74,7 @@ function BudgetsContent() {
           Add New Budget
         </Button>
       </div>
-      <div className="grid grid-cols-[1fr_2fr] gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 items-start">
         <SpendingSummaryCard
           budgets={budgets}
           categoryMap={categoryMap}

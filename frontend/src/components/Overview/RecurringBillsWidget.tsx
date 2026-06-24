@@ -23,7 +23,7 @@ export function RecurringBillsWidget() {
     due_soon: summary.due_soon_total,
   };
   return (
-    <div className="rounded-xl bg-card p-8 flex flex-col gap-8">
+    <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Recurring Bills</h2>
         <Link

@@ -1,4 +1,6 @@
 import { Logo } from '@/components/Common/Logo';
+import { useIsMobile } from '@/hooks/useMobile';
+import { Link as RouterLink, useRouterState } from '@tanstack/react-router';
 import {
   Sidebar,
   SidebarContent,
@@ -20,9 +22,6 @@ import {
 } from '@/components/Icons/NavIcons';
 
 import { type Item, Main } from './Main';
-
-import { User } from './User';
-import useAuth from '@/hooks/useAuth';
 
 const navItems: Item[] = [
   { icon: OverviewIcon, title: 'Overview', path: '/' },
@@ -54,7 +53,33 @@ function MinimizeMenu() {
 }
 
 export function AppSidebar() {
-  const { user } = useAuth();
+  const isMobile = useIsMobile();
+  const router = useRouterState();
+  const currentPath = router.location.pathname;
+
+  if (isMobile) {
+    return (
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:h-16 h-14 items-end bg-[#201F24] rounded-tl-lg rounded-tr-lg">
+        {navItems.map((item) => {
+          const isActive = currentPath === item.path;
+          return (
+            <RouterLink
+              key={item.title}
+              to={item.path}
+              className={`flex flex-1 flex-col items-center gap-1 pb-3 pt-2 text-xs transition-colors ${
+                isActive
+                  ? 'text-[#277C78] bg-[#F8F4F0] rounded-tl-lg rounded-tr-lg'
+                  : 'text-[#B3B3B3]'
+              }`}
+            >
+              <item.icon className="size-5 shrink-0" />
+              <span className="hidden sm:inline">{item.title}</span>
+            </RouterLink>
+          );
+        })}
+      </nav>
+    );
+  }
 
   return (
     <Sidebar collapsible="icon">

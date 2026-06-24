@@ -90,7 +90,7 @@ export function BillsTable({
   onSortBy,
 }: Props) {
   return (
-    <div className="flex flex-col gap-6 rounded-xl bg-card p-6 flex-1">
+    <div className="flex flex-col gap-6 rounded-xl bg-card p-6 flex-1 w-full">
       {/* Controls */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="relative w-full max-w-sm">

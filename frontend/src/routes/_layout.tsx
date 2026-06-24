@@ -20,7 +20,7 @@ function Layout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <main className="flex-1 p-6 md:p-8">
+        <main className="flex-1 p-6 pb-24 md:p-8 lg:pb-8">
           <div className="mx-auto max-w-7xl">
             <Outlet />
           </div>

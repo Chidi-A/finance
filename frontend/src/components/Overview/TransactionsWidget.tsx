@@ -18,7 +18,7 @@ export function TransactionsWidget() {
   const displayed = transactions.slice(0, 5);
 
   return (
-    <div className="rounded-xl bg-card p-8 flex flex-col gap-8">
+    <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Transactions</h2>
         <Link

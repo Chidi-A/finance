@@ -24,6 +24,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   Table,
   TableBody,
   TableCell,
@@ -130,25 +136,65 @@ function TransactionsTableContent({
   }
   return (
     <>
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>Recipient / Sender</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Transaction Date</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {transactions.map((tx) => (
-            <TransactionRow
-              key={tx.id}
-              tx={tx}
-              categoryName={categoryMap[tx.category_id] ?? '—'}
-            />
-          ))}
-        </TableBody>
-      </Table>
+      <div className="hidden sm:block">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead>Recipient / Sender</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Transaction Date</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {transactions.map((tx) => (
+              <TransactionRow
+                key={tx.id}
+                tx={tx}
+                categoryName={categoryMap[tx.category_id] ?? '—'}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex flex-col divide-y sm:hidden">
+        {transactions.map((tx) => {
+          const isPositive = Number(tx.amount) >= 0;
+          return (
+            <div key={tx.id} className="flex items-center gap-3 py-4">
+              <Avatar>
+                <AvatarImage
+                  src={tx.avatar_url ?? undefined}
+                  alt={tx.counterparty_name}
+                />
+                <AvatarFallback>
+                  {getInitials(tx.counterparty_name)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-1 items-center justify-between">
+                <div className="flex flex-col">
+                  <span className="font-medium">{tx.counterparty_name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {categoryMap[tx.category_id] ?? '—'}
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span
+                    className={`font-semibold ${isPositive ? 'text-emerald-600' : ''}`}
+                  >
+                    {formatAmount(tx.amount)}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {formatDate(tx.posted_at)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       {totalPages > 1 && (
         <Pagination>
           <PaginationPrevious
@@ -247,8 +293,8 @@ function Transactions() {
     <div className="flex flex-col gap-6">
       <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
       <div className="flex flex-col gap-6 rounded-xl  bg-card p-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="relative w-full max-w-sm">
+        <div className="flex items-center justify-between gap-4">
+          <div className="relative w-[70%] sm:w-full sm:max-w-sm">
             <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search transaction"
@@ -257,7 +303,8 @@ function Transactions() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <div className="flex flex-wrap items-center gap-3">
+          {/* Desktop controls */}
+          <div className="hidden sm:flex flex-wrap items-center gap-3">
             <span className="text-sm text-muted-foreground">Sort by</span>
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-32">
@@ -289,6 +336,65 @@ function Transactions() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Mobile controls — icon buttons */}
+          <div className="flex sm:hidden items-center gap-5">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-1">
+                  <img src="/assets/images/icon-sort-mobile.svg" alt="Sort" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {(
+                  [
+                    { value: 'latest', label: 'Latest' },
+                    { value: 'oldest', label: 'Oldest' },
+                    { value: 'a-z', label: 'A to Z' },
+                    { value: 'z-a', label: 'Z to A' },
+                    { value: 'highest', label: 'Highest' },
+                    { value: 'lowest', label: 'Lowest' },
+                  ] as const
+                ).map(({ value, label }) => (
+                  <DropdownMenuItem
+                    key={value}
+                    onSelect={() => setSortBy(value)}
+                    className={sortBy === value ? 'font-semibold' : ''}
+                  >
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-1">
+                  <img
+                    src="/assets/images/icon-filter-mobile.svg"
+                    alt="Filter"
+                  />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onSelect={() => setCategoryId(null)}
+                  className={categoryId === null ? 'font-semibold' : ''}
+                >
+                  All Transactions
+                </DropdownMenuItem>
+                {categories.map((c) => (
+                  <DropdownMenuItem
+                    key={c.id}
+                    onSelect={() => setCategoryId(c.id)}
+                    className={categoryId === c.id ? 'font-semibold' : ''}
+                  >
+                    {c.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <TransactionsTable categoryMap={categoryMap} />

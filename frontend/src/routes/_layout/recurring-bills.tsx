@@ -58,7 +58,7 @@ function RecurringBills() {
         <BillsSummaryPanel summary={summary} totalBills={summary.total_bills} />
         <div
           className={
-            isFetching ? 'opacity-60 transition-opacity flex-1' : 'flex-1'
+            isFetching ? 'opacity-60 transition-opacity w-full' : 'w-full'
           }
         >
           <BillsTable

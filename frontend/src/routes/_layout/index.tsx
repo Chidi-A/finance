@@ -51,20 +51,14 @@ function OverviewContent() {
 
       <BalanceCards account={account} />
 
-      <div className="grid grid-cols-[3fr_2fr] gap-6 items-start">
-        {/* Left column */}
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 items-start">
         <div className="flex flex-col gap-6">
-          {/* PotsWidget goes here */}
           <PotsWidget />
-          {/* TransactionsWidget goes here */}
           <TransactionsWidget />
         </div>
 
-        {/* Right column */}
         <div className="flex flex-col gap-6">
-          {/* BudgetsWidget goes here */}
           <BudgetsWidget />
-          {/* RecurringBillsWidget goes here */}
           <RecurringBillsWidget />
         </div>
       </div>

@@ -10,7 +10,7 @@ export function PotsWidget() {
   const displayed = pots.slice(0, 4);
 
   return (
-    <div className="rounded-xl bg-card p-8 flex flex-col gap-5">
+    <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-5">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Pots</h2>
         <Link
@@ -26,7 +26,7 @@ export function PotsWidget() {
         </Link>
       </div>
 
-      <div className="flex gap-5">
+      <div className="flex flex-col lg:flex-row gap-5">
         {/* Total saved */}
         <div className="rounded-xl bg-[#F8F4F0] flex items-center gap-4 px-4 py-5 flex-1">
           <img
