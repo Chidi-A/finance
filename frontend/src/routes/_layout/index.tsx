@@ -16,6 +16,8 @@ import {
 import { BalanceCards } from '@/components/Overview/BalanceCards';
 import { PotsWidget } from '@/components/Overview/PotsWidget';
 import { TransactionsWidget } from '@/components/Overview/TransactionsWidget';
+import { BudgetsWidget } from '@/components/Overview/BudgetsWidget';
+import { RecurringBillsWidget } from '@/components/Overview/RecurringBillsWidget';
 
 export const Route = createFileRoute('/_layout/')({
   component: Overview,
@@ -49,7 +51,7 @@ function OverviewContent() {
 
       <BalanceCards account={account} />
 
-      <div className="grid grid-cols-2 gap-6 items-start">
+      <div className="grid grid-cols-[3fr_2fr] gap-6 items-start">
         {/* Left column */}
         <div className="flex flex-col gap-6">
           {/* PotsWidget goes here */}
@@ -61,7 +63,9 @@ function OverviewContent() {
         {/* Right column */}
         <div className="flex flex-col gap-6">
           {/* BudgetsWidget goes here */}
+          <BudgetsWidget />
           {/* RecurringBillsWidget goes here */}
+          <RecurringBillsWidget />
         </div>
       </div>
     </div>

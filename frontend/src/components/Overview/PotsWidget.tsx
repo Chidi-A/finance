@@ -15,7 +15,7 @@ export function PotsWidget() {
         <h2 className="text-xl font-bold">Pots</h2>
         <Link
           to="/pots"
-          className="flex items-center gap- text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           See Details
           <img
