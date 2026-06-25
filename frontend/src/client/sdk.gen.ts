@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AccountReadAccountMeResponse, BudgetsReadBudgetsResponse, BudgetsCreateBudgetData, BudgetsCreateBudgetResponse, BudgetsUpdateBudgetData, BudgetsUpdateBudgetResponse, BudgetsDeleteBudgetData, BudgetsDeleteBudgetResponse, CategoriesReadCategoriesResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, PotsReadPotsResponse, PotsCreatePotData, PotsCreatePotResponse, PotsUpdatePotData, PotsUpdatePotResponse, PotsDeletePotData, PotsDeletePotResponse, PotsAddToPotData, PotsAddToPotResponse, PotsWithdrawFromPotData, PotsWithdrawFromPotResponse, TransactionsReadTransactionsData, TransactionsReadTransactionsResponse, TransactionsCountTransactionsData, TransactionsCountTransactionsResponse, TransactionsSpendingByCategoryResponse, TransactionsRecurringBillsSummaryResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { AccountReadAccountMeResponse, BudgetsReadBudgetsResponse, BudgetsCreateBudgetData, BudgetsCreateBudgetResponse, BudgetsUpdateBudgetData, BudgetsUpdateBudgetResponse, BudgetsDeleteBudgetData, BudgetsDeleteBudgetResponse, CategoriesReadCategoriesResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, PotsReadPotsResponse, PotsCreatePotData, PotsCreatePotResponse, PotsUpdatePotData, PotsUpdatePotResponse, PotsDeletePotData, PotsDeletePotResponse, PotsAddToPotData, PotsAddToPotResponse, PotsWithdrawFromPotData, PotsWithdrawFromPotResponse, TransactionsReadTransactionsData, TransactionsReadTransactionsResponse, TransactionsCountTransactionsData, TransactionsCountTransactionsResponse, TransactionsSpendingByCategoryResponse, TransactionsRecurringBillsSummaryResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class AccountService {
     /**
@@ -371,6 +371,46 @@ export class UsersService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/users/me'
+        });
+    }
+    
+    /**
+     * Update User Me
+     * Update own user.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns UserPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateUserMe(data: UsersUpdateUserMeData): CancelablePromise<UsersUpdateUserMeResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/users/me',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Password Me
+     * Update own password.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static updatePasswordMe(data: UsersUpdatePasswordMeData): CancelablePromise<UsersUpdatePasswordMeResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/users/me/password',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
         });
     }
     

@@ -75,6 +75,118 @@ def test_register_user_already_exists_error(client: TestClient) -> None:
     assert r.json()["detail"] == "The user with this email already exists in the system"
 
 
+def _user_auth_headers(client: TestClient, email: str, password: str) -> dict[str, str]:
+    r = client.post(
+        f"{settings.API_V1_STR}/login/access-token",
+        data={"username": email, "password": password},
+    )
+    token = r.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
+
+
+def test_update_user_me(client: TestClient, db: Session) -> None:
+    email = random_email()
+    password = random_lower_string()
+    user = crud.create_user(
+        session=db, user_create=UserCreate(email=email, password=password)
+    )
+    headers = _user_auth_headers(client, email, password)
+    updated_email = random_email()
+
+    r = client.patch(
+        f"{settings.API_V1_STR}/users/me",
+        headers=headers,
+        json={"email": updated_email},
+    )
+    assert r.status_code == 200
+    assert r.json()["email"] == updated_email
+
+    db.refresh(user)
+    assert user.email == updated_email
+
+
+def test_update_user_me_email_exists(client: TestClient, db: Session) -> None:
+    existing_email = random_email()
+    password = random_lower_string()
+    crud.create_user(
+        session=db,
+        user_create=UserCreate(email=existing_email, password=password),
+    )
+
+    email = random_email()
+    user_password = random_lower_string()
+    crud.create_user(
+        session=db, user_create=UserCreate(email=email, password=user_password)
+    )
+    headers = _user_auth_headers(client, email, user_password)
+
+    r = client.patch(
+        f"{settings.API_V1_STR}/users/me",
+        headers=headers,
+        json={"email": existing_email},
+    )
+    assert r.status_code == 409
+
+
+def test_update_password_me(client: TestClient, db: Session) -> None:
+    email = random_email()
+    password = random_lower_string()
+    new_password = random_lower_string()
+    crud.create_user(
+        session=db, user_create=UserCreate(email=email, password=password)
+    )
+    headers = _user_auth_headers(client, email, password)
+
+    r = client.patch(
+        f"{settings.API_V1_STR}/users/me/password",
+        headers=headers,
+        json={"current_password": password, "new_password": new_password},
+    )
+    assert r.status_code == 200
+    assert r.json()["message"] == "Password updated successfully"
+
+    assert _user_auth_headers(client, email, new_password)
+
+
+def test_update_password_me_incorrect_password(client: TestClient, db: Session) -> None:
+    email = random_email()
+    password = random_lower_string()
+    crud.create_user(
+        session=db, user_create=UserCreate(email=email, password=password)
+    )
+    headers = _user_auth_headers(client, email, password)
+
+    r = client.patch(
+        f"{settings.API_V1_STR}/users/me/password",
+        headers=headers,
+        json={
+            "current_password": random_lower_string(),
+            "new_password": random_lower_string(),
+        },
+    )
+    assert r.status_code == 400
+    assert r.json()["detail"] == "Incorrect password"
+
+
+def test_update_password_me_same_password(client: TestClient, db: Session) -> None:
+    email = random_email()
+    password = random_lower_string()
+    crud.create_user(
+        session=db, user_create=UserCreate(email=email, password=password)
+    )
+    headers = _user_auth_headers(client, email, password)
+
+    r = client.patch(
+        f"{settings.API_V1_STR}/users/me/password",
+        headers=headers,
+        json={"current_password": password, "new_password": password},
+    )
+    assert r.status_code == 400
+    assert (
+        r.json()["detail"] == "New password cannot be the same as the current one"
+    )
+
+
 def test_delete_user_me(client: TestClient, db: Session) -> None:
     username = random_email()
     password = random_lower_string()

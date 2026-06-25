@@ -38,19 +38,6 @@ test.describe("Edit user profile", () => {
     await page.getByRole("tab", { name: "My profile" }).click()
   })
 
-  test("Edit user name with a valid name", async ({ page }) => {
-    const updatedName = "Test User 2"
-
-    await page.getByRole("button", { name: "Edit" }).click()
-    await page.getByLabel("Full name").fill(updatedName)
-    await page.getByRole("button", { name: "Save" }).click()
-
-    await expect(page.getByText("User updated successfully")).toBeVisible()
-    await expect(
-      page.locator("form").getByText(updatedName, { exact: true }),
-    ).toBeVisible()
-  })
-
   test("Edit user email with an invalid email shows error", async ({
     page,
   }) => {
@@ -88,23 +75,6 @@ test.describe("Edit user email", () => {
 
 test.describe("Cancel edit actions", () => {
   test.use({ storageState: { cookies: [], origins: [] } })
-
-  test("Cancel edit action restores original name", async ({ page }) => {
-    const email = randomEmail()
-    const password = randomPassword()
-    const user = await createUser({ email, password })
-
-    await logInUser(page, email, password)
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "My profile" }).click()
-    await page.getByRole("button", { name: "Edit" }).click()
-    await page.getByLabel("Full name").fill("Test User")
-    await page.getByRole("button", { name: "Cancel" }).first().click()
-
-    await expect(
-      page.locator("form").getByText(user.full_name as string, { exact: true }),
-    ).toBeVisible()
-  })
 
   test("Cancel edit action restores original email", async ({ page }) => {
     const email = randomEmail()

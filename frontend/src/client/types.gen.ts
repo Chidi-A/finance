@@ -109,6 +109,11 @@ export type TransactionPublic = {
     created_at?: (string | null);
 };
 
+export type UpdatePassword = {
+    current_password: string;
+    new_password: string;
+};
+
 export type UserPublic = {
     email: string;
     id: string;
@@ -118,6 +123,10 @@ export type UserPublic = {
 export type UserRegister = {
     email: string;
     password: string;
+};
+
+export type UserUpdateMe = {
+    email?: (string | null);
 };
 
 export type ValidationError = {
@@ -226,6 +235,18 @@ export type TransactionsRecurringBillsSummaryResponse = (RecurringBillsSummary);
 export type UsersReadUserMeResponse = (UserPublic);
 
 export type UsersDeleteUserMeResponse = (Message);
+
+export type UsersUpdateUserMeData = {
+    requestBody: UserUpdateMe;
+};
+
+export type UsersUpdateUserMeResponse = (UserPublic);
+
+export type UsersUpdatePasswordMeData = {
+    requestBody: UpdatePassword;
+};
+
+export type UsersUpdatePasswordMeResponse = (Message);
 
 export type UsersRegisterUserData = {
     requestBody: UserRegister;

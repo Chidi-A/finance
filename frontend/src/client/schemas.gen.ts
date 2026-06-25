@@ -597,6 +597,26 @@ export const TransactionPublicSchema = {
     title: 'TransactionPublic'
 } as const;
 
+export const UpdatePasswordSchema = {
+    properties: {
+        current_password: {
+            type: 'string',
+            maxLength: 128,
+            minLength: 8,
+            title: 'Current Password'
+        },
+        new_password: {
+            type: 'string',
+            maxLength: 128,
+            minLength: 8,
+            title: 'New Password'
+        }
+    },
+    type: 'object',
+    required: ['current_password', 'new_password'],
+    title: 'UpdatePassword'
+} as const;
+
 export const UserPublicSchema = {
     properties: {
         email: {
@@ -646,6 +666,26 @@ export const UserRegisterSchema = {
     type: 'object',
     required: ['email', 'password'],
     title: 'UserRegister'
+} as const;
+
+export const UserUpdateMeSchema = {
+    properties: {
+        email: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    format: 'email'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Email'
+        }
+    },
+    type: 'object',
+    title: 'UserUpdateMe'
 } as const;
 
 export const ValidationErrorSchema = {

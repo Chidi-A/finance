@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { type UpdatePassword, UsersService } from "@/client"
 import {
   Form,
   FormControl,
@@ -51,9 +52,8 @@ const ChangePassword = () => {
   })
 
   const mutation = useMutation({
-    mutationFn: async (_data: FormData) => {
-      throw new Error("Password change is not supported yet")
-    },
+    mutationFn: (data: UpdatePassword) =>
+      UsersService.updatePasswordMe({ requestBody: data }),
     onSuccess: () => {
       showSuccessToast("Password updated successfully")
       form.reset()
@@ -62,7 +62,10 @@ const ChangePassword = () => {
   })
 
   const onSubmit = async (data: FormData) => {
-    mutation.mutate(data)
+    mutation.mutate({
+      current_password: data.current_password,
+      new_password: data.new_password,
+    })
   }
 
   return (

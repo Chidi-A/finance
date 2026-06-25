@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { UsersService, type UserUpdateMe } from "@/client"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -45,9 +46,8 @@ const UserInformation = () => {
   }
 
   const mutation = useMutation({
-    mutationFn: async (_data: FormData) => {
-      throw new Error("Profile update is not supported yet")
-    },
+    mutationFn: (data: UserUpdateMe) =>
+      UsersService.updateUserMe({ requestBody: data }),
     onSuccess: () => {
       showSuccessToast("User updated successfully")
       toggleEditMode()
@@ -59,11 +59,24 @@ const UserInformation = () => {
   })
 
   const onSubmit = (data: FormData) => {
-    mutation.mutate(data)
+    const updateData: UserUpdateMe = {}
+
+    if (data.email !== currentUser?.email) {
+      updateData.email = data.email
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      toggleEditMode()
+      return
+    }
+
+    mutation.mutate(updateData)
   }
 
   const onCancel = () => {
-    form.reset()
+    form.reset({
+      email: currentUser?.email,
+    })
     toggleEditMode()
   }
 
