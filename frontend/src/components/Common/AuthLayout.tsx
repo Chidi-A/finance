@@ -1,8 +1,7 @@
-import { Appearance } from "@/components/Common/Appearance"
-import { Logo } from "@/components/Common/Logo"
+import { Logo } from '@/components/Common/Logo';
 
 interface AuthLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
@@ -33,14 +32,17 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex justify-end">
-          <Appearance />
+      <div className="flex flex-col min-h-svh lg:min-h-0">
+        <div className="flex items-center justify-center bg-[#201F24] px-6 py-8 lg:hidden [&_div]:pl-0 rounded-bl-[0.5rem] rounded-br-[0.5rem]">
+          <Logo className="h-8 pl-0" asLink={false} />
         </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-[560px]">{children}</div>
+
+        <div className="flex flex-1 flex-col gap-4 p-6 md:p-10">
+          <div className="flex flex-1 items-center justify-center">
+            <div className="w-full max-w-[560px]">{children}</div>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
