@@ -259,7 +259,7 @@ function TransactionsTable({
 }
 
 function Transactions() {
-  const { search, sortBy, categoryId, page } = Route.useSearch();
+  const { search, sortBy, categoryId } = Route.useSearch();
   const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
   const navigate = useNavigate({ from: Route.fullPath });
 
@@ -286,8 +286,6 @@ function Transactions() {
     });
   const setCategoryId = (value: string | null) =>
     navigate({ search: (prev) => ({ ...prev, categoryId: value, page: 1 }) });
-  const setPage = (value: number) =>
-    navigate({ search: (prev) => ({ ...prev, page: value }) });
 
   return (
     <div className="flex flex-col gap-6">

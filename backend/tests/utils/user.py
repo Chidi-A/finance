@@ -3,6 +3,7 @@ from sqlmodel import Session
 
 from app import crud
 from app.core.config import settings
+from app.core.security import get_password_hash
 from app.models import User, UserCreate
 from tests.utils.utils import random_email, random_lower_string
 
@@ -43,5 +44,8 @@ def authentication_token_from_email(
     else:
         if not user.id:
             raise Exception("User id not set")
+        user.hashed_password = get_password_hash(password)
+        db.add(user)
+        db.commit()
 
     return user_authentication_headers(client=client, email=email, password=password)

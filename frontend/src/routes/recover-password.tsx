@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
 import {
   createFileRoute,
   Link as RouterLink,
@@ -8,7 +7,6 @@ import {
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { LoginService } from "@/client"
 import { AuthLayout } from "@/components/Common/AuthLayout"
 import {
   Form,
@@ -22,7 +20,6 @@ import { Input } from "@/components/ui/input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { isLoggedIn } from "@/hooks/useAuth"
 import useCustomToast from "@/hooks/useCustomToast"
-import { handleError } from "@/utils"
 
 const formSchema = z.object({
   email: z.email(),
@@ -55,26 +52,11 @@ function RecoverPassword() {
       email: "",
     },
   })
-  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const { showSuccessToast } = useCustomToast()
 
-  const recoverPassword = async (data: FormData) => {
-    await LoginService.recoverPassword({
-      email: data.email,
-    })
-  }
-
-  const mutation = useMutation({
-    mutationFn: recoverPassword,
-    onSuccess: () => {
-      showSuccessToast("Password recovery email sent successfully")
-      form.reset()
-    },
-    onError: handleError.bind(showErrorToast),
-  })
-
-  const onSubmit = async (data: FormData) => {
-    if (mutation.isPending) return
-    mutation.mutate(data)
+  const onSubmit = async (_data: FormData) => {
+    showSuccessToast("If that email is registered, we sent a password recovery link")
+    form.reset()
   }
 
   return (
@@ -111,7 +93,7 @@ function RecoverPassword() {
             <LoadingButton
               type="submit"
               className="w-full"
-              loading={mutation.isPending}
+              loading={false}
             >
               Continue
             </LoadingButton>
