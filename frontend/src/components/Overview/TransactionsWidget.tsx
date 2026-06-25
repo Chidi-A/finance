@@ -1,21 +1,20 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
-
-import { getTransactionsQueryOptions } from '@/queries/transactions';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { formatDate, formatAmount, getInitials } from '@/utils';
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getTransactionsQueryOptions } from "@/queries/transactions"
+import { formatAmount, formatDate, getInitials } from "@/utils"
 
 export function TransactionsWidget() {
   const { data: transactions } = useSuspenseQuery(
     getTransactionsQueryOptions({
       page: 1,
-      search: '',
-      sortBy: 'latest',
+      search: "",
+      sortBy: "latest",
       categoryId: null,
     }),
-  );
+  )
 
-  const displayed = transactions.slice(0, 5);
+  const displayed = transactions.slice(0, 5)
 
   return (
     <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-8">
@@ -25,13 +24,13 @@ export function TransactionsWidget() {
           to="/transactions"
           search={{
             page: 1,
-            search: '',
-            sortBy: 'latest',
+            search: "",
+            sortBy: "latest",
             categoryId: null,
           }}
           className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          View All{' '}
+          View All{" "}
           <img
             src="/assets/images/icon-caret-right.svg"
             alt="See Details"
@@ -42,7 +41,7 @@ export function TransactionsWidget() {
 
       <div className="flex flex-col divide-y divide-border">
         {displayed.map((tx) => {
-          const isPositive = Number(tx.amount) >= 0;
+          const isPositive = Number(tx.amount) >= 0
           return (
             <div
               key={tx.id}
@@ -64,7 +63,7 @@ export function TransactionsWidget() {
               </div>
               <div className="flex flex-col items-end gap-2">
                 <span
-                  className={`text-sm font-semibold ${isPositive ? 'text-emerald-600' : ''}`}
+                  className={`text-sm font-semibold ${isPositive ? "text-emerald-600" : ""}`}
                 >
                   {formatAmount(tx.amount)}
                 </span>
@@ -73,9 +72,9 @@ export function TransactionsWidget() {
                 </span>
               </div>
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

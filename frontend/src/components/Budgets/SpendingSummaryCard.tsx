@@ -1,11 +1,11 @@
-import { Pie, PieChart } from 'recharts';
+import { Pie, PieChart } from "recharts"
 
-import type { BudgetPublic } from '@/client/types.gen';
+import type { BudgetPublic } from "@/client/types.gen"
 
 interface SpendingSummaryCardProps {
-  budgets: BudgetPublic[];
-  categoryMap: Record<string, string>;
-  spentMap: Record<string, number>;
+  budgets: BudgetPublic[]
+  categoryMap: Record<string, string>
+  spentMap: Record<string, number>
 }
 
 export function SpendingSummaryCard({
@@ -16,13 +16,13 @@ export function SpendingSummaryCard({
   const totalSpent = budgets.reduce(
     (sum, b) => sum + (spentMap[b.category_id] ?? 0),
     0,
-  );
-  const totalMax = budgets.reduce((sum, b) => sum + Number(b.maximum), 0);
+  )
+  const totalMax = budgets.reduce((sum, b) => sum + Number(b.maximum), 0)
 
   const pieData = budgets.map((b) => ({
     value: spentMap[b.category_id] ?? 0,
     fill: b.theme,
-  }));
+  }))
 
   return (
     <div className="rounded-xl bg-card p-6 flex flex-col gap-6 min-w-[260px]">
@@ -61,7 +61,7 @@ export function SpendingSummaryCard({
         <h2 className="font-bold mb-4">Spending Summary</h2>
         <div className="flex flex-col">
           {budgets.map((b) => {
-            const spent = spentMap[b.category_id] ?? 0;
+            const spent = spentMap[b.category_id] ?? 0
             return (
               <div
                 key={b.id}
@@ -73,21 +73,21 @@ export function SpendingSummaryCard({
                     style={{ backgroundColor: b.theme }}
                   />
                   <span className="text-sm text-muted-foreground">
-                    {categoryMap[b.category_id] ?? '—'}
+                    {categoryMap[b.category_id] ?? "—"}
                   </span>
                 </div>
                 <div className="text-sm text-right">
                   <span className="font-semibold">${spent.toFixed(2)}</span>
                   <span className="text-muted-foreground">
-                    {' '}
+                    {" "}
                     of ${Number(b.maximum).toFixed(2)}
                   </span>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
     </div>
-  );
+  )
 }

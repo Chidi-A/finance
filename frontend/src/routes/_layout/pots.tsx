@@ -1,26 +1,25 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { Suspense, useState } from 'react';
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { Plus } from "lucide-react"
+import { Suspense, useState } from "react"
+import { AddPotDialog } from "@/components/Pots/AddPotDialog"
+import { PotCard } from "@/components/Pots/PotCard"
+import { Button } from "@/components/ui/button"
+import { getPotsQueryOptions } from "@/queries/pots"
 
-import { getPotsQueryOptions } from '@/queries/pots';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { PotCard } from '@/components/Pots/PotCard';
-import { AddPotDialog } from '@/components/Pots/AddPotDialog';
-
-export const Route = createFileRoute('/_layout/pots')({
+export const Route = createFileRoute("/_layout/pots")({
   component: Pots,
   loader: ({ context: { queryClient } }) =>
     queryClient.ensureQueryData(getPotsQueryOptions()),
   head: () => ({
-    meta: [{ title: 'Pots - Finance App' }],
+    meta: [{ title: "Pots - Finance App" }],
   }),
-});
+})
 
 function PotsContent() {
-  const [addOpen, setAddOpen] = useState(false);
-  const { data: pots } = useSuspenseQuery(getPotsQueryOptions());
-  const usedThemes = pots.map((p) => p.theme);
+  const [addOpen, setAddOpen] = useState(false)
+  const { data: pots } = useSuspenseQuery(getPotsQueryOptions())
+  const usedThemes = pots.map((p) => p.theme)
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -44,7 +43,7 @@ function PotsContent() {
         usedThemes={usedThemes}
       />
     </div>
-  );
+  )
 }
 
 function Pots() {
@@ -52,5 +51,5 @@ function Pots() {
     <Suspense fallback={<div>Loading...</div>}>
       <PotsContent />
     </Suspense>
-  );
+  )
 }

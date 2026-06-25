@@ -1,12 +1,12 @@
-import type { RecurringBillsSummary } from '@/client/types.gen';
+import type { RecurringBillsSummary } from "@/client/types.gen"
 
 function formatMoney(value: string) {
-  return `$${Number(value).toFixed(2)}`;
+  return `$${Number(value).toFixed(2)}`
 }
 
 interface Props {
-  summary: RecurringBillsSummary;
-  totalBills: string;
+  summary: RecurringBillsSummary
+  totalBills: string
 }
 
 export function BillsSummaryPanel({ summary, totalBills }: Props) {
@@ -52,5 +52,5 @@ export function BillsSummaryPanel({ summary, totalBills }: Props) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import type { AccountPublic } from '@/client/types.gen';
+import type { AccountPublic } from "@/client/types.gen"
 
 function formatMoney(value: string | undefined) {
-  return `$${Number(value ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+  return `$${Number(value ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
 }
 
 interface Props {
-  account: AccountPublic;
+  account: AccountPublic
 }
 
 export function BalanceCards({ account }: Props) {
@@ -32,5 +32,5 @@ export function BalanceCards({ account }: Props) {
         </span>
       </div>
     </div>
-  );
+  )
 }

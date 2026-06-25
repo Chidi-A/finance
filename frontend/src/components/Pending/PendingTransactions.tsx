@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -6,8 +6,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { LIMIT } from '@/queries/transactions';
+} from "@/components/ui/table"
+import { LIMIT } from "@/queries/transactions"
 
 const PendingTransactions = () => (
   <Table>
@@ -41,6 +41,6 @@ const PendingTransactions = () => (
       ))}
     </TableBody>
   </Table>
-);
+)
 
-export default PendingTransactions;
+export default PendingTransactions

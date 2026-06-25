@@ -1,25 +1,23 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { Suspense } from 'react';
-
-import { getAccountQueryOptions } from '@/queries/account';
-import { getPotsQueryOptions } from '@/queries/pots';
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
+import { BalanceCards } from "@/components/Overview/BalanceCards"
+import { BudgetsWidget } from "@/components/Overview/BudgetsWidget"
+import { PotsWidget } from "@/components/Overview/PotsWidget"
+import { RecurringBillsWidget } from "@/components/Overview/RecurringBillsWidget"
+import { TransactionsWidget } from "@/components/Overview/TransactionsWidget"
+import { getAccountQueryOptions } from "@/queries/account"
 import {
   getBudgetsQueryOptions,
   getSpendingByCategoryQueryOptions,
-} from '@/queries/budgets';
+} from "@/queries/budgets"
+import { getPotsQueryOptions } from "@/queries/pots"
 import {
   getRecurringBillsSummaryQueryOptions,
   getTransactionsQueryOptions,
-} from '@/queries/transactions';
+} from "@/queries/transactions"
 
-import { BalanceCards } from '@/components/Overview/BalanceCards';
-import { PotsWidget } from '@/components/Overview/PotsWidget';
-import { TransactionsWidget } from '@/components/Overview/TransactionsWidget';
-import { BudgetsWidget } from '@/components/Overview/BudgetsWidget';
-import { RecurringBillsWidget } from '@/components/Overview/RecurringBillsWidget';
-
-export const Route = createFileRoute('/_layout/')({
+export const Route = createFileRoute("/_layout/")({
   component: Overview,
   loader: ({ context: { queryClient } }) =>
     Promise.all([
@@ -28,8 +26,8 @@ export const Route = createFileRoute('/_layout/')({
       queryClient.ensureQueryData(
         getTransactionsQueryOptions({
           page: 1,
-          search: '',
-          sortBy: 'latest',
+          search: "",
+          sortBy: "latest",
           categoryId: null,
         }),
       ),
@@ -38,12 +36,12 @@ export const Route = createFileRoute('/_layout/')({
       queryClient.ensureQueryData(getRecurringBillsSummaryQueryOptions()),
     ]),
   head: () => ({
-    meta: [{ title: 'Overview - Finance App' }],
+    meta: [{ title: "Overview - Finance App" }],
   }),
-});
+})
 
 function OverviewContent() {
-  const { data: account } = useSuspenseQuery(getAccountQueryOptions());
+  const { data: account } = useSuspenseQuery(getAccountQueryOptions())
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,7 +61,7 @@ function OverviewContent() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function Overview() {
@@ -71,5 +69,5 @@ function Overview() {
     <Suspense fallback={<div>Loading...</div>}>
       <OverviewContent />
     </Suspense>
-  );
+  )
 }

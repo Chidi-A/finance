@@ -1,19 +1,19 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-import type { PotPublic } from '@/client/types.gen';
-import { PotsService } from '@/client/sdk.gen';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { X } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { PotsService } from "@/client/sdk.gen"
+import type { PotPublic } from "@/client/types.gen"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -21,14 +21,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { X } from 'lucide-react';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 interface WithdrawDialogProps {
-  pot: PotPublic;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  pot: PotPublic
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 export function WithdrawDialog({
@@ -36,34 +35,34 @@ export function WithdrawDialog({
   open,
   onOpenChange,
 }: WithdrawDialogProps) {
-  const queryClient = useQueryClient();
-  const total = Number(pot.total ?? 0);
-  const target = Number(pot.target);
+  const queryClient = useQueryClient()
+  const total = Number(pot.total ?? 0)
+  const target = Number(pot.target)
 
   const schema = z.object({
     amount: z
       .string()
-      .min(1, 'Required')
-      .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, {
-        message: 'Must be greater than 0',
+      .min(1, "Required")
+      .refine((v) => !Number.isNaN(parseFloat(v)) && parseFloat(v) > 0, {
+        message: "Must be greater than 0",
       })
       .refine((v) => parseFloat(v) <= total, {
         message: `Cannot exceed current total of $${total.toFixed(2)}`,
       }),
-  });
+  })
 
-  type FormValues = z.infer<typeof schema>;
+  type FormValues = z.infer<typeof schema>
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { amount: '' },
-  });
+    defaultValues: { amount: "" },
+  })
 
-  const amount = parseFloat(form.watch('amount') || '0') || 0;
-  const newTotal = Math.max(0, total - amount);
-  const currentPct = Math.min(100, (total / target) * 100);
-  const newPct = Math.min(100, (newTotal / target) * 100);
-  const withdrawPct = currentPct - newPct;
+  const amount = parseFloat(form.watch("amount") || "0") || 0
+  const newTotal = Math.max(0, total - amount)
+  const currentPct = Math.min(100, (total / target) * 100)
+  const newPct = Math.min(100, (newTotal / target) * 100)
+  const withdrawPct = currentPct - newPct
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
@@ -72,11 +71,11 @@ export function WithdrawDialog({
         requestBody: { amount: data.amount },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pots'] });
-      form.reset();
-      onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["pots"] })
+      form.reset()
+      onOpenChange(false)
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,7 +108,7 @@ export function WithdrawDialog({
           <div className="w-full h-3 bg-white rounded-full overflow-hidden flex">
             <div
               className="h-full rounded-l-full transition-all"
-              style={{ width: `${newPct}%`, backgroundColor: '#201F24' }}
+              style={{ width: `${newPct}%`, backgroundColor: "#201F24" }}
             />
             {amount > 0 && (
               <div
@@ -161,11 +160,11 @@ export function WithdrawDialog({
               className="w-full h-13 bg-[#201F24]"
               disabled={isPending}
             >
-              {isPending ? 'Withdrawing...' : 'Confirm Withdrawal'}
+              {isPending ? "Withdrawing..." : "Confirm Withdrawal"}
             </Button>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,36 +1,38 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
-
-import type { BudgetPublic } from '@/client/types.gen';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getLatestTransactionsByCategoryQueryOptions } from '@/queries/transactions';
-import { formatAmount, formatDate, getInitials } from '@/utils';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
+import { Ellipsis, X } from "lucide-react"
+import { useState } from "react"
+import { BudgetsService } from "@/client/sdk.gen"
+import type { BudgetPublic } from "@/client/types.gen"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Ellipsis, X } from 'lucide-react';
-import { EditBudgetDialog } from './EditBudgetDialog';
-import { useState } from 'react';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { BudgetsService } from '@/client/sdk.gen';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { Button } from '../ui/button';
+} from "@/components/ui/dropdown-menu"
+import { getLatestTransactionsByCategoryQueryOptions } from "@/queries/transactions"
+import { formatAmount, formatDate, getInitials } from "@/utils"
+import { Button } from "../ui/button"
+import { EditBudgetDialog } from "./EditBudgetDialog"
 
 interface BudgetCardProps {
-  budget: BudgetPublic;
-  categoryName: string;
-  spent: number;
-  usedThemes: string[];
+  budget: BudgetPublic
+  categoryName: string
+  spent: number
+  usedThemes: string[]
 }
 
 export function BudgetCard({
@@ -39,28 +41,28 @@ export function BudgetCard({
   spent,
   usedThemes,
 }: BudgetCardProps) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
 
   const { data: latestTxs } = useSuspenseQuery(
     getLatestTransactionsByCategoryQueryOptions(budget.category_id),
-  );
+  )
 
-  const maximum = Number(budget.maximum);
-  const remaining = Math.max(0, maximum - spent);
-  const progress = Math.min(100, (spent / maximum) * 100);
+  const maximum = Number(budget.maximum)
+  const remaining = Math.max(0, maximum - spent)
+  const progress = Math.min(100, (spent / maximum) * 100)
 
   const { mutate: deleteBudget, isPending: isDeleting } = useMutation({
     mutationFn: () => BudgetsService.deleteBudget({ budgetId: budget.id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['budgets'] });
+      queryClient.invalidateQueries({ queryKey: ["budgets"] })
       queryClient.invalidateQueries({
-        queryKey: ['transactions', 'spending-by-category'],
-      });
+        queryKey: ["transactions", "spending-by-category"],
+      })
     },
-  });
+  })
 
   return (
     <div className="rounded-xl bg-card p-6 flex flex-col gap-4">
@@ -138,8 +140,8 @@ export function BudgetCard({
               search={{
                 categoryId: budget.category_id,
                 page: 1,
-                search: '',
-                sortBy: 'latest',
+                search: "",
+                sortBy: "latest",
               }}
               className="text-sm text-muted-foreground flex items-center gap-1 hover:text-foreground"
             >
@@ -212,7 +214,7 @@ export function BudgetCard({
               disabled={isDeleting}
               onClick={() => deleteBudget()}
             >
-              {isDeleting ? 'Deleting...' : 'Yes, Confirm Deletion'}
+              {isDeleting ? "Deleting..." : "Yes, Confirm Deletion"}
             </Button>
             <Button
               variant="outline"
@@ -225,5 +227,5 @@ export function BudgetCard({
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

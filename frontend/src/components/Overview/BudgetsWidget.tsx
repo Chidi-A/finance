@@ -1,25 +1,25 @@
-import { useMemo } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
-import { Pie, PieChart } from 'recharts';
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
+import { useMemo } from "react"
+import { Pie, PieChart } from "recharts"
 
 import {
   getBudgetsQueryOptions,
   getSpendingByCategoryQueryOptions,
-} from '@/queries/budgets';
-import { getCategoriesQueryOptions } from '@/queries/categories';
+} from "@/queries/budgets"
+import { getCategoriesQueryOptions } from "@/queries/categories"
 
 export function BudgetsWidget() {
-  const { data: budgets } = useSuspenseQuery(getBudgetsQueryOptions());
+  const { data: budgets } = useSuspenseQuery(getBudgetsQueryOptions())
   const { data: spendingByCategory } = useSuspenseQuery(
     getSpendingByCategoryQueryOptions(),
-  );
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
+  )
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
 
   const categoryMap = useMemo(
     () => Object.fromEntries(categories.map((c) => [c.id, c.name])),
     [categories],
-  );
+  )
 
   const spentMap = useMemo(
     () =>
@@ -30,20 +30,20 @@ export function BudgetsWidget() {
         ]),
       ),
     [spendingByCategory],
-  );
+  )
 
   const totalSpent = budgets.reduce(
     (sum, b) => sum + (spentMap[b.category_id] ?? 0),
     0,
-  );
-  const totalMax = budgets.reduce((sum, b) => sum + Number(b.maximum), 0);
+  )
+  const totalMax = budgets.reduce((sum, b) => sum + Number(b.maximum), 0)
 
   const pieData = budgets.map((b) => ({
     value: spentMap[b.category_id] ?? 0,
     fill: b.theme,
-  }));
+  }))
 
-  const displayed = budgets.slice(0, 4);
+  const displayed = budgets.slice(0, 4)
 
   return (
     <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-10">
@@ -53,7 +53,7 @@ export function BudgetsWidget() {
           to="/budgets"
           className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          See Details{' '}
+          See Details{" "}
           <img
             src="/assets/images/icon-caret-right.svg"
             alt="See Details"
@@ -105,7 +105,7 @@ export function BudgetsWidget() {
               />
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs text-muted-foreground">
-                  {categoryMap[b.category_id] ?? '—'}
+                  {categoryMap[b.category_id] ?? "—"}
                 </span>
                 <span className="text-sm font-bold">
                   ${Number(b.maximum).toFixed(2)}
@@ -116,5 +116,5 @@ export function BudgetsWidget() {
         </div>
       </div>
     </div>
-  );
+  )
 }

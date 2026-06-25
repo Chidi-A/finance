@@ -1,13 +1,13 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
 
-import { getPotsQueryOptions } from '@/queries/pots';
+import { getPotsQueryOptions } from "@/queries/pots"
 
 export function PotsWidget() {
-  const { data: pots } = useSuspenseQuery(getPotsQueryOptions());
+  const { data: pots } = useSuspenseQuery(getPotsQueryOptions())
 
-  const totalSaved = pots.reduce((sum, p) => sum + Number(p.total ?? 0), 0);
-  const displayed = pots.slice(0, 4);
+  const totalSaved = pots.reduce((sum, p) => sum + Number(p.total ?? 0), 0)
+  const displayed = pots.slice(0, 4)
 
   return (
     <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-5">
@@ -61,5 +61,5 @@ export function PotsWidget() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -131,11 +131,7 @@ function ResetPassword() {
               )}
             />
 
-            <LoadingButton
-              type="submit"
-              className="w-full"
-              loading={mutation.isPending}
-            >
+            <LoadingButton type="submit" className="w-full" loading={false}>
               Reset Password
             </LoadingButton>
           </div>

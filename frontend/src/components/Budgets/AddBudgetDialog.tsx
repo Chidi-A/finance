@@ -1,22 +1,22 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  useSuspenseQuery,
-  useQueryClient,
   useMutation,
-} from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-import { BudgetsService } from '@/client/sdk.gen';
-import { Button } from '@/components/ui/button';
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query"
+import { X } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { BudgetsService } from "@/client/sdk.gen"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -24,37 +24,36 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { BUDGET_THEMES } from '@/lib/budget-themes';
-import { getCategoriesQueryOptions } from '@/queries/categories';
-import { X } from 'lucide-react';
-import { getLatestTransactionsByCategoryQueryOptions } from '@/queries/transactions';
+} from "@/components/ui/select"
+import { BUDGET_THEMES } from "@/lib/budget-themes"
+import { getCategoriesQueryOptions } from "@/queries/categories"
+import { getLatestTransactionsByCategoryQueryOptions } from "@/queries/transactions"
 
 const schema = z.object({
-  categoryId: z.string().min(1, 'Please select a category'),
+  categoryId: z.string().min(1, "Please select a category"),
   maximum: z
     .string()
-    .min(1, 'Required')
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, {
-      message: 'Must be greater than 0',
+    .min(1, "Required")
+    .refine((v) => !Number.isNaN(parseFloat(v)) && parseFloat(v) > 0, {
+      message: "Must be greater than 0",
     }),
-  theme: z.string().min(1, 'Please select a theme'),
-});
+  theme: z.string().min(1, "Please select a theme"),
+})
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>
 
 interface AddBudgetDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  usedThemes: string[];
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  usedThemes: string[]
 }
 
 export function AddBudgetDialog({
@@ -62,17 +61,17 @@ export function AddBudgetDialog({
   onOpenChange,
   usedThemes,
 }: AddBudgetDialogProps) {
-  const queryClient = useQueryClient();
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
+  const queryClient = useQueryClient()
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      categoryId: '',
-      maximum: '',
-      theme: '',
+      categoryId: "",
+      maximum: "",
+      theme: "",
     },
-  });
+  })
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
@@ -86,15 +85,15 @@ export function AddBudgetDialog({
     onSuccess: async (newBudget) => {
       await queryClient.prefetchQuery(
         getLatestTransactionsByCategoryQueryOptions(newBudget.category_id),
-      );
-      queryClient.invalidateQueries({ queryKey: ['budgets'] });
+      )
+      queryClient.invalidateQueries({ queryKey: ["budgets"] })
       queryClient.invalidateQueries({
-        queryKey: ['transactions', 'spending-by-category'],
-      });
-      form.reset();
-      onOpenChange(false);
+        queryKey: ["transactions", "spending-by-category"],
+      })
+      form.reset()
+      onOpenChange(false)
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -207,7 +206,7 @@ export function AddBudgetDialog({
                     </FormControl>
                     <SelectContent>
                       {BUDGET_THEMES.map((t) => {
-                        const alreadyUsed = usedThemes.includes(t.value);
+                        const alreadyUsed = usedThemes.includes(t.value)
                         return (
                           <SelectItem
                             key={t.value}
@@ -229,7 +228,7 @@ export function AddBudgetDialog({
                               )}
                             </div>
                           </SelectItem>
-                        );
+                        )
                       })}
                     </SelectContent>
                   </Select>
@@ -243,11 +242,11 @@ export function AddBudgetDialog({
               className="w-full mt-2 h-13 bg-[#201F24]"
               disabled={isPending}
             >
-              {isPending ? 'Adding...' : 'Add Budget'}
+              {isPending ? "Adding..." : "Add Budget"}
             </Button>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

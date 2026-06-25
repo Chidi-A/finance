@@ -1,10 +1,13 @@
-import { createRootRouteWithContext } from '@tanstack/react-router';
-import type { QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { HeadContent, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import ErrorComponent from '@/components/Common/ErrorComponent';
-import NotFound from '@/components/Common/NotFound';
+import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Outlet,
+} from "@tanstack/react-router"
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
+import ErrorComponent from "@/components/Common/ErrorComponent"
+import NotFound from "@/components/Common/NotFound"
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
@@ -19,4 +22,4 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     notFoundComponent: () => <NotFound />,
     errorComponent: () => <ErrorComponent />,
   },
-);
+)

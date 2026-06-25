@@ -1,14 +1,14 @@
-import { Search } from 'lucide-react';
-import type { TransactionPublic } from '@/client/types.gen';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
+import { Search } from "lucide-react"
+import type { TransactionPublic } from "@/client/types.gen"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -16,30 +16,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { getInitials } from '@/utils';
+} from "@/components/ui/table"
+import { getInitials } from "@/utils"
 
-function getBillStatus(postedAt: string): 'paid' | 'due-soon' | 'upcoming' {
-  const billDay = new Date(postedAt).getUTCDate();
-  const today = new Date().getDate();
-  if (billDay <= today) return 'paid';
-  if (billDay - today <= 5) return 'due-soon';
-  return 'upcoming';
+function getBillStatus(postedAt: string): "paid" | "due-soon" | "upcoming" {
+  const billDay = new Date(postedAt).getUTCDate()
+  const today = new Date().getDate()
+  if (billDay <= today) return "paid"
+  if (billDay - today <= 5) return "due-soon"
+  return "upcoming"
 }
 
-function StatusDot({ status }: { status: 'paid' | 'due-soon' | 'upcoming' }) {
-  if (status === 'paid')
-    return <span className="size-2 rounded-full bg-emerald-500 inline-block" />;
-  if (status === 'due-soon')
-    return <span className="size-2 rounded-full bg-[#C94736] inline-block" />;
-  return null;
+function StatusDot({ status }: { status: "paid" | "due-soon" | "upcoming" }) {
+  if (status === "paid")
+    return <span className="size-2 rounded-full bg-emerald-500 inline-block" />
+  if (status === "due-soon")
+    return <span className="size-2 rounded-full bg-[#C94736] inline-block" />
+  return null
 }
 
 function BillRow({ bill }: { bill: TransactionPublic }) {
-  const status = getBillStatus(bill.posted_at);
-  const day = new Date(bill.posted_at).getUTCDate();
-  const amount = Math.abs(Number(bill.amount)).toFixed(2);
-  const isDueSoon = status === 'due-soon';
+  const status = getBillStatus(bill.posted_at)
+  const day = new Date(bill.posted_at).getUTCDate()
+  const amount = Math.abs(Number(bill.amount)).toFixed(2)
+  const isDueSoon = status === "due-soon"
 
   return (
     <TableRow>
@@ -59,27 +59,27 @@ function BillRow({ bill }: { bill: TransactionPublic }) {
       </TableCell>
       <TableCell>
         <div
-          className={`flex items-center gap-2 text-sm ${isDueSoon ? 'text-[#C94736]' : 'text-emerald-600'}`}
+          className={`flex items-center gap-2 text-sm ${isDueSoon ? "text-[#C94736]" : "text-emerald-600"}`}
         >
           Monthly-{day}th
           <StatusDot status={status} />
         </div>
       </TableCell>
       <TableCell
-        className={`text-right font-semibold ${isDueSoon ? 'text-[#C94736]' : ''}`}
+        className={`text-right font-semibold ${isDueSoon ? "text-[#C94736]" : ""}`}
       >
         ${amount}
       </TableCell>
     </TableRow>
-  );
+  )
 }
 
 interface Props {
-  bills: TransactionPublic[];
-  search: string;
-  sortBy: string;
-  onSearch: (v: string) => void;
-  onSortBy: (v: string) => void;
+  bills: TransactionPublic[]
+  search: string
+  sortBy: string
+  onSearch: (v: string) => void
+  onSortBy: (v: string) => void
 }
 
 export function BillsTable({
@@ -146,5 +146,5 @@ export function BillsTable({
         </Table>
       )}
     </div>
-  );
+  )
 }

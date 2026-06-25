@@ -1,18 +1,18 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-import { PotsService } from '@/client/sdk.gen';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { X } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { PotsService } from "@/client/sdk.gen"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -20,35 +20,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { BUDGET_THEMES } from '@/lib/budget-themes';
-import { X } from 'lucide-react';
+} from "@/components/ui/select"
+import { BUDGET_THEMES } from "@/lib/budget-themes"
 
 const schema = z.object({
-  name: z.string().min(1, 'Required').max(255),
+  name: z.string().min(1, "Required").max(255),
   target: z
     .string()
-    .min(1, 'Required')
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, {
-      message: 'Must be greater than 0',
+    .min(1, "Required")
+    .refine((v) => !Number.isNaN(parseFloat(v)) && parseFloat(v) > 0, {
+      message: "Must be greater than 0",
     }),
-  theme: z.string().min(1, 'Please select a theme'),
-});
+  theme: z.string().min(1, "Please select a theme"),
+})
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>
 
 interface AddPotDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  usedThemes: string[];
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  usedThemes: string[]
 }
 
 export function AddPotDialog({
@@ -56,12 +55,12 @@ export function AddPotDialog({
   onOpenChange,
   usedThemes,
 }: AddPotDialogProps) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '', target: '', theme: '' },
-  });
+    defaultValues: { name: "", target: "", theme: "" },
+  })
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
@@ -73,11 +72,11 @@ export function AddPotDialog({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pots'] });
-      form.reset();
-      onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["pots"] })
+      form.reset()
+      onOpenChange(false)
     },
-  });
+  })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -182,7 +181,7 @@ export function AddPotDialog({
                     </FormControl>
                     <SelectContent>
                       {BUDGET_THEMES.map((t) => {
-                        const alreadyUsed = usedThemes.includes(t.value);
+                        const alreadyUsed = usedThemes.includes(t.value)
                         return (
                           <SelectItem
                             key={t.value}
@@ -204,7 +203,7 @@ export function AddPotDialog({
                               )}
                             </div>
                           </SelectItem>
-                        );
+                        )
                       })}
                     </SelectContent>
                   </Select>
@@ -218,11 +217,11 @@ export function AddPotDialog({
               className="w-full mt-2 h-13 bg-[#201F24]"
               disabled={isPending}
             >
-              {isPending ? 'Adding...' : 'Add Pot'}
+              {isPending ? "Adding..." : "Add Pot"}
             </Button>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

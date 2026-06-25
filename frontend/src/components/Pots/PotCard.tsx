@@ -1,50 +1,49 @@
-import { useState } from 'react';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { Ellipsis, X } from 'lucide-react';
-
-import type { PotPublic } from '@/client/types.gen';
-import { PotsService } from '@/client/sdk.gen';
-import { Button } from '@/components/ui/button';
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Ellipsis, X } from "lucide-react"
+import { useState } from "react"
+import { PotsService } from "@/client/sdk.gen"
+import type { PotPublic } from "@/client/types.gen"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { EditPotDialog } from './EditPotDialog';
-import { AddMoneyDialog } from './AddMoneyDialog';
-import { WithdrawDialog } from './WithdrawDialog';
+} from "@/components/ui/dropdown-menu"
+import { AddMoneyDialog } from "./AddMoneyDialog"
+import { EditPotDialog } from "./EditPotDialog"
+import { WithdrawDialog } from "./WithdrawDialog"
 
 interface PotCardProps {
-  pot: PotPublic;
-  usedThemes: string[];
+  pot: PotPublic
+  usedThemes: string[]
 }
 
 export function PotCard({ pot, usedThemes }: PotCardProps) {
-  const queryClient = useQueryClient();
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [addMoneyOpen, setAddMoneyOpen] = useState(false);
-  const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const queryClient = useQueryClient()
+  const [editOpen, setEditOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [addMoneyOpen, setAddMoneyOpen] = useState(false)
+  const [withdrawOpen, setWithdrawOpen] = useState(false)
 
-  const total = Number(pot.total ?? 0);
-  const target = Number(pot.target);
-  const progress = Math.min(100, (total / target) * 100);
+  const total = Number(pot.total ?? 0)
+  const target = Number(pot.target)
+  const progress = Math.min(100, (total / target) * 100)
 
   const { mutate: deletePot, isPending: isDeleting } = useMutation({
     mutationFn: () => PotsService.deletePot({ potId: pot.id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pots'] });
+      queryClient.invalidateQueries({ queryKey: ["pots"] })
     },
-  });
+  })
 
   return (
     <div className="rounded-xl bg-card p-6 flex flex-col gap-5">
@@ -155,7 +154,7 @@ export function PotCard({ pot, usedThemes }: PotCardProps) {
               disabled={isDeleting}
               onClick={() => deletePot()}
             >
-              {isDeleting ? 'Deleting...' : 'Yes, Confirm Deletion'}
+              {isDeleting ? "Deleting..." : "Yes, Confirm Deletion"}
             </Button>
             <Button
               variant="outline"
@@ -168,5 +167,5 @@ export function PotCard({ pot, usedThemes }: PotCardProps) {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

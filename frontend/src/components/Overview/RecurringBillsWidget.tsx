@@ -1,37 +1,37 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
 
-import { getRecurringBillsSummaryQueryOptions } from '@/queries/transactions';
+import { getRecurringBillsSummaryQueryOptions } from "@/queries/transactions"
 
 function formatMoney(value: string) {
-  return `$${Number(value).toFixed(2)}`;
+  return `$${Number(value).toFixed(2)}`
 }
 
 const ROWS = [
-  { key: 'paid', label: 'Paid Bills', color: '#277C78' },
-  { key: 'upcoming', label: 'Total Upcoming', color: '#F2CDAC' },
-  { key: 'due_soon', label: 'Due Soon', color: '#82C9D7' },
-] as const;
+  { key: "paid", label: "Paid Bills", color: "#277C78" },
+  { key: "upcoming", label: "Total Upcoming", color: "#F2CDAC" },
+  { key: "due_soon", label: "Due Soon", color: "#82C9D7" },
+] as const
 
 export function RecurringBillsWidget() {
   const { data: summary } = useSuspenseQuery(
     getRecurringBillsSummaryQueryOptions(),
-  );
+  )
   const amounts = {
     paid: summary.paid_total,
     upcoming: summary.upcoming_total,
     due_soon: summary.due_soon_total,
-  };
+  }
   return (
     <div className="rounded-xl bg-card p-6 lg:p-8 flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Recurring Bills</h2>
         <Link
           to="/recurring-bills"
-          search={{ search: '', sortBy: 'latest' }}
+          search={{ search: "", sortBy: "latest" }}
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          See Details{' '}
+          See Details{" "}
           <img
             src="/assets/images/icon-caret-right.svg"
             alt=""
@@ -54,5 +54,5 @@ export function RecurringBillsWidget() {
         ))}
       </div>
     </div>
-  );
+  )
 }

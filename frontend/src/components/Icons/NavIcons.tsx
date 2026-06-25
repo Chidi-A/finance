@@ -1,4 +1,4 @@
-import type { SVGProps } from 'react';
+import type { SVGProps } from "react"
 
 export function OverviewIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -8,6 +8,8 @@ export function OverviewIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 18 19"
       width="18"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Overview"
       {...props}
     >
       <path
@@ -15,7 +17,7 @@ export function OverviewIcon(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
       />
     </svg>
-  );
+  )
 }
 
 export function TransactionsIcon(props: SVGProps<SVGSVGElement>) {
@@ -26,6 +28,8 @@ export function TransactionsIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 18 18"
       width="18"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Transactions"
       {...props}
     >
       <path
@@ -33,7 +37,7 @@ export function TransactionsIcon(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
       />
     </svg>
-  );
+  )
 }
 
 export function BudgetsIcon(props: SVGProps<SVGSVGElement>) {
@@ -44,6 +48,8 @@ export function BudgetsIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 20 20"
       width="20"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Budgets"
       {...props}
     >
       <path
@@ -51,7 +57,7 @@ export function BudgetsIcon(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
       />
     </svg>
-  );
+  )
 }
 
 export function PotsIcon(props: SVGProps<SVGSVGElement>) {
@@ -62,6 +68,8 @@ export function PotsIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 18 22"
       width="18"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Pots"
       {...props}
     >
       <path
@@ -69,7 +77,7 @@ export function PotsIcon(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
       />
     </svg>
-  );
+  )
 }
 
 export function RecurringBillsIcon(props: SVGProps<SVGSVGElement>) {
@@ -80,6 +88,8 @@ export function RecurringBillsIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 20 17"
       width="20"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Recurring Bills"
       {...props}
     >
       <path
@@ -87,7 +97,7 @@ export function RecurringBillsIcon(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
       />
     </svg>
-  );
+  )
 }
 
 export function MinimizeMenuIcon(props: SVGProps<SVGSVGElement>) {
@@ -98,6 +108,8 @@ export function MinimizeMenuIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 20 20"
       width="20"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Minimize Menu"
       {...props}
     >
       <path
@@ -105,5 +117,5 @@ export function MinimizeMenuIcon(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
       />
     </svg>
-  );
+  )
 }

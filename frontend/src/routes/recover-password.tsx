@@ -55,7 +55,9 @@ function RecoverPassword() {
   const { showSuccessToast } = useCustomToast()
 
   const onSubmit = async (_data: FormData) => {
-    showSuccessToast("If that email is registered, we sent a password recovery link")
+    showSuccessToast(
+      "If that email is registered, we sent a password recovery link",
+    )
     form.reset()
   }
 
@@ -90,11 +92,7 @@ function RecoverPassword() {
               )}
             />
 
-            <LoadingButton
-              type="submit"
-              className="w-full"
-              loading={false}
-            >
+            <LoadingButton type="submit" className="w-full" loading={false}>
               Continue
             </LoadingButton>
           </div>

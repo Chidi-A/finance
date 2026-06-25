@@ -1,16 +1,16 @@
-import { TransactionsService } from '@/client/sdk.gen';
+import { TransactionsService } from "@/client/sdk.gen"
 
-const LIMIT = 10;
+const LIMIT = 10
 
 interface TransactionParams {
-  page: number;
-  search: string;
-  sortBy: string;
-  categoryId: string | null;
+  page: number
+  search: string
+  sortBy: string
+  categoryId: string | null
 }
 
 export function getTransactionsQueryOptions(params: TransactionParams) {
-  const { page, search, sortBy, categoryId } = params;
+  const { page, search, sortBy, categoryId } = params
   return {
     queryFn: () =>
       TransactionsService.readTransactions({
@@ -20,24 +20,24 @@ export function getTransactionsQueryOptions(params: TransactionParams) {
         sortBy: sortBy,
         categoryId: categoryId ?? undefined,
       }),
-    queryKey: ['transactions', params],
-  };
+    queryKey: ["transactions", params],
+  }
 }
 
 export function getTransactionsCountQueryOptions(
-  params: Omit<TransactionParams, 'page' | 'sortBy'>,
+  params: Omit<TransactionParams, "page" | "sortBy">,
 ) {
-  const { search, categoryId } = params;
+  const { search, categoryId } = params
   return {
     queryFn: () =>
       TransactionsService.countTransactions({
         search: search || undefined,
         categoryId: categoryId ?? undefined,
       }),
-    queryKey: ['transactions', 'count', params],
-  };
+    queryKey: ["transactions", "count", params],
+  }
 }
-export { LIMIT };
+export { LIMIT }
 
 export function getLatestTransactionsByCategoryQueryOptions(
   categoryId: string,
@@ -47,17 +47,17 @@ export function getLatestTransactionsByCategoryQueryOptions(
       TransactionsService.readTransactions({
         categoryId,
         limit: 3,
-        sortBy: 'latest',
+        sortBy: "latest",
       }),
-    queryKey: ['transactions', 'latest', categoryId],
-  };
+    queryKey: ["transactions", "latest", categoryId],
+  }
 }
 
 export function getRecurringBillsQueryOptions(params: {
-  search: string;
-  sortBy: string;
+  search: string
+  sortBy: string
 }) {
-  const { search, sortBy } = params;
+  const { search, sortBy } = params
   return {
     queryFn: () =>
       TransactionsService.readTransactions({
@@ -66,13 +66,13 @@ export function getRecurringBillsQueryOptions(params: {
         sortBy: sortBy,
         limit: 100,
       }),
-    queryKey: ['transactions', 'recurring', params],
-  };
+    queryKey: ["transactions", "recurring", params],
+  }
 }
 
 export function getRecurringBillsSummaryQueryOptions() {
   return {
     queryFn: () => TransactionsService.recurringBillsSummary(),
-    queryKey: ['transactions', 'recurring-summary'],
-  };
+    queryKey: ["transactions", "recurring-summary"],
+  }
 }

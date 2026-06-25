@@ -1,20 +1,23 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { getCategoriesQueryOptions } from '@/queries/categories';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import type { BudgetPublic } from '@/client/types.gen';
-import { BudgetsService } from '@/client/sdk.gen';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query"
+import { X } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { BudgetsService } from "@/client/sdk.gen"
+import type { BudgetPublic } from "@/client/types.gen"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -22,47 +25,46 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { BUDGET_THEMES } from '@/lib/budget-themes';
-import { X } from 'lucide-react';
+} from "@/components/ui/select"
+import { BUDGET_THEMES } from "@/lib/budget-themes"
+import { getCategoriesQueryOptions } from "@/queries/categories"
 
 const schema = z.object({
-  categoryId: z.string().min(1, 'Please select a category'),
+  categoryId: z.string().min(1, "Please select a category"),
   maximum: z
     .string()
-    .min(1, 'Required')
-    .refine((v) => !isNaN(parseFloat(v)) && parseFloat(v) > 0, {
-      message: 'Must be greater than 0',
+    .min(1, "Required")
+    .refine((v) => !Number.isNaN(parseFloat(v)) && parseFloat(v) > 0, {
+      message: "Must be greater than 0",
     }),
-  theme: z.string().min(1, 'Please select a theme'),
-});
+  theme: z.string().min(1, "Please select a theme"),
+})
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>
 
 interface EditBudgetDialogProps {
-  budget: BudgetPublic;
-  categoryName: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  usedThemes: string[];
+  budget: BudgetPublic
+  categoryName: string
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  usedThemes: string[]
 }
 
 export function EditBudgetDialog({
   budget,
-  categoryName,
   open,
   onOpenChange,
   usedThemes,
 }: EditBudgetDialogProps) {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -71,7 +73,7 @@ export function EditBudgetDialog({
       maximum: budget.maximum,
       theme: budget.theme,
     },
-  });
+  })
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
@@ -84,12 +86,12 @@ export function EditBudgetDialog({
         },
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['budgets'] });
-      onOpenChange(false);
+      queryClient.invalidateQueries({ queryKey: ["budgets"] })
+      onOpenChange(false)
     },
-  });
+  })
 
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -200,7 +202,7 @@ export function EditBudgetDialog({
                       {BUDGET_THEMES.map((t) => {
                         const alreadyUsed =
                           usedThemes.includes(t.value) &&
-                          t.value !== budget.theme;
+                          t.value !== budget.theme
                         return (
                           <SelectItem
                             key={t.value}
@@ -222,7 +224,7 @@ export function EditBudgetDialog({
                               )}
                             </div>
                           </SelectItem>
-                        );
+                        )
                       })}
                     </SelectContent>
                   </Select>
@@ -235,11 +237,11 @@ export function EditBudgetDialog({
               className="w-full mt-2 h-13 bg-[#201F24]"
               disabled={isPending}
             >
-              {isPending ? 'Saving...' : 'Save Changes'}
+              {isPending ? "Saving..." : "Save Changes"}
             </Button>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

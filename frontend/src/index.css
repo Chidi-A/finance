@@ -1,20 +1,20 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
 @font-face {
-  font-family: 'Public Sans';
-  src: url('/assets/fonts/PublicSans-VariableFont_wght.ttf') format('truetype');
+  font-family: "Public Sans";
+  src: url("/assets/fonts/PublicSans-VariableFont_wght.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Public Sans';
-  src: url('/assets/fonts/PublicSans-Italic-VariableFont_wght.ttf')
-    format('truetype');
+  font-family: "Public Sans";
+  src: url("/assets/fonts/PublicSans-Italic-VariableFont_wght.ttf")
+    format("truetype");
   font-weight: 100 900;
   font-style: italic;
 }
-
-@import 'tailwindcss';
-@import 'tw-animate-css';
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -95,10 +95,10 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Public Sans', sans-serif;
+    font-family: "Public Sans", sans-serif;
   }
   button,
-  [role='button'] {
+  [role="button"] {
     cursor: pointer;
   }
 }

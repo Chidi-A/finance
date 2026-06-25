@@ -1,20 +1,19 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { Suspense, useMemo, useState } from 'react';
-
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { Plus } from "lucide-react"
+import { Suspense, useMemo, useState } from "react"
+import { AddBudgetDialog } from "@/components/Budgets/AddBudgetDialog"
+import { BudgetCard } from "@/components/Budgets/BudgetCard"
+import { SpendingSummaryCard } from "@/components/Budgets/SpendingSummaryCard"
+import { Button } from "@/components/ui/button"
 import {
   getBudgetsQueryOptions,
   getSpendingByCategoryQueryOptions,
-} from '@/queries/budgets';
-import { getCategoriesQueryOptions } from '@/queries/categories';
-import { SpendingSummaryCard } from '@/components/Budgets/SpendingSummaryCard';
-import { getLatestTransactionsByCategoryQueryOptions } from '@/queries/transactions';
-import { BudgetCard } from '@/components/Budgets/BudgetCard';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { AddBudgetDialog } from '@/components/Budgets/AddBudgetDialog';
+} from "@/queries/budgets"
+import { getCategoriesQueryOptions } from "@/queries/categories"
+import { getLatestTransactionsByCategoryQueryOptions } from "@/queries/transactions"
 
-export const Route = createFileRoute('/_layout/budgets')({
+export const Route = createFileRoute("/_layout/budgets")({
   component: Budgets,
   loader: ({ context: { queryClient } }) =>
     Promise.all([
@@ -31,23 +30,23 @@ export const Route = createFileRoute('/_layout/budgets')({
       ),
     ),
   head: () => ({
-    meta: [{ title: 'Budgets - Finance App' }],
+    meta: [{ title: "Budgets - Finance App" }],
   }),
-});
+})
 
 function BudgetsContent() {
-  const [addOpen, setAddOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false)
 
-  const { data: budgets } = useSuspenseQuery(getBudgetsQueryOptions());
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
+  const { data: budgets } = useSuspenseQuery(getBudgetsQueryOptions())
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
   const { data: spendingByCategory } = useSuspenseQuery(
     getSpendingByCategoryQueryOptions(),
-  );
+  )
 
   const categoryMap = useMemo(
     () => Object.fromEntries(categories.map((c) => [c.id, c.name])),
     [categories],
-  );
+  )
 
   const spentMap = useMemo(
     () =>
@@ -58,9 +57,9 @@ function BudgetsContent() {
         ]),
       ),
     [spendingByCategory],
-  );
+  )
 
-  const usedThemes = budgets.map((b) => b.theme);
+  const usedThemes = budgets.map((b) => b.theme)
 
   return (
     <div className="flex flex-col gap-6">
@@ -85,7 +84,7 @@ function BudgetsContent() {
             <BudgetCard
               key={b.id}
               budget={b}
-              categoryName={categoryMap[b.category_id] ?? '—'}
+              categoryName={categoryMap[b.category_id] ?? "—"}
               spent={spentMap[b.category_id] ?? 0}
               usedThemes={usedThemes}
             />
@@ -98,7 +97,7 @@ function BudgetsContent() {
         usedThemes={usedThemes}
       />
     </div>
-  );
+  )
 }
 
 function Budgets() {
@@ -106,5 +105,5 @@ function Budgets() {
     <Suspense fallback={<div>Loading...</div>}>
       <BudgetsContent />
     </Suspense>
-  );
+  )
 }

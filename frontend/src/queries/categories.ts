@@ -1,9 +1,9 @@
-import { CategoriesService } from '@/client/sdk.gen';
+import { CategoriesService } from "@/client/sdk.gen"
 
 export function getCategoriesQueryOptions() {
   return {
     queryFn: () => CategoriesService.readCategories(),
-    queryKey: ['categories'],
+    queryKey: ["categories"],
     staleTime: Infinity,
-  };
+  }
 }
