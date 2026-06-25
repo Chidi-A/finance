@@ -24,3 +24,12 @@ def test_get_access_token_incorrect_password(client: TestClient) -> None:
     assert r.status_code == 400
 
 
+def test_test_token(
+    client: TestClient, account_user_token_headers: dict[str, str]
+) -> None:
+    r = client.post(
+        f"{settings.API_V1_STR}/login/test-token",
+        headers=account_user_token_headers,
+    )
+    assert r.status_code == 200
+    assert "email" in r.json()
