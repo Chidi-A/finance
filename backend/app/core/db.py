@@ -2,7 +2,7 @@ from sqlmodel import Session, create_engine, select
 
 from app import crud
 from app.core.config import settings
-from app.models import User, UserCreate
+from app.models import Account, User, UserCreate
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
@@ -30,6 +30,11 @@ def init_db(session: Session) -> None:
             password=settings.FIRST_SUPERUSER_PASSWORD,
         )
         user = crud.create_user(session=session, user_create=user_in)
+        crud.create_account_with_data(session=session, user=user)
+    elif not session.exec(
+        select(Account).where(Account.owner_id == user.id)
+    ).first():
+        crud.create_account_with_data(session=session, user=user)
 
     
     demo_user = session.exec(
