@@ -21,7 +21,6 @@ import { Route as LayoutRecurringBillsRouteImport } from './routes/_layout/recur
 import { Route as LayoutPotsRouteImport } from './routes/_layout/pots'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutBudgetsRouteImport } from './routes/_layout/budgets'
-import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -82,11 +81,6 @@ const LayoutBudgetsRoute = LayoutBudgetsRouteImport.update({
   path: '/budgets',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutAdminRoute = LayoutAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => LayoutRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
@@ -94,7 +88,6 @@ export interface FileRoutesByFullPath {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof LayoutAdminRoute
   '/budgets': typeof LayoutBudgetsRoute
   '/items': typeof LayoutItemsRoute
   '/pots': typeof LayoutPotsRoute
@@ -107,7 +100,6 @@ export interface FileRoutesByTo {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/admin': typeof LayoutAdminRoute
   '/budgets': typeof LayoutBudgetsRoute
   '/items': typeof LayoutItemsRoute
   '/pots': typeof LayoutPotsRoute
@@ -123,7 +115,6 @@ export interface FileRoutesById {
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
-  '/_layout/admin': typeof LayoutAdminRoute
   '/_layout/budgets': typeof LayoutBudgetsRoute
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/pots': typeof LayoutPotsRoute
@@ -140,7 +131,6 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/admin'
     | '/budgets'
     | '/items'
     | '/pots'
@@ -153,7 +143,6 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/admin'
     | '/budgets'
     | '/items'
     | '/pots'
@@ -168,7 +157,6 @@ export interface FileRouteTypes {
     | '/recover-password'
     | '/reset-password'
     | '/signup'
-    | '/_layout/admin'
     | '/_layout/budgets'
     | '/_layout/items'
     | '/_layout/pots'
@@ -272,18 +260,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutBudgetsRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/admin': {
-      id: '/_layout/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof LayoutAdminRouteImport
-      parentRoute: typeof LayoutRoute
-    }
   }
 }
 
 interface LayoutRouteChildren {
-  LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutBudgetsRoute: typeof LayoutBudgetsRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutPotsRoute: typeof LayoutPotsRoute
@@ -294,7 +274,6 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutAdminRoute: LayoutAdminRoute,
   LayoutBudgetsRoute: LayoutBudgetsRoute,
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutPotsRoute: LayoutPotsRoute,

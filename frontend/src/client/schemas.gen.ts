@@ -597,26 +597,6 @@ export const TransactionPublicSchema = {
     title: 'TransactionPublic'
 } as const;
 
-export const UserCreateSchema = {
-    properties: {
-        email: {
-            type: 'string',
-            maxLength: 255,
-            format: 'email',
-            title: 'Email'
-        },
-        password: {
-            type: 'string',
-            maxLength: 128,
-            minLength: 8,
-            title: 'Password'
-        }
-    },
-    type: 'object',
-    required: ['email', 'password'],
-    title: 'UserCreate'
-} as const;
-
 export const UserPublicSchema = {
     properties: {
         email: {
