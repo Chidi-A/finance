@@ -1,4 +1,4 @@
-# FastAPI Project - Backend
+# Finance App — Backend
 
 ## Requirements
 

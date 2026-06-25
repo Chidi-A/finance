@@ -1,4 +1,4 @@
-# FastAPI Project - Development
+# Finance App — Development
 
 ## Docker Compose
 
